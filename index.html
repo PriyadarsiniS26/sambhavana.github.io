@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sambhavana Priyadarsini — PM & TPM Portfolio</title>
+  <meta name="description" content="Product and program management portfolio. MBA candidate at UVA Darden. Former TPM at Microsoft. Building for the gap between what's technically possible and what users actually need." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sage:          #4a7c6f;
+      --sage-light:    #e8f0ee;
+      --sage-dark:     #2e5248;
+      --ink:           #1a1d1c;
+      --ink-mid:       #4a504e;
+      --ink-light:     #8a918f;
+      --warm:          #f8f6f1;
+      --warm-dark:     #f0ede5;
+      --white:         #ffffff;
+      --amber:         #b87333;
+      --amber-light:   #fdf0e3;
+      --border:        rgba(74,124,111,0.13);
+      --border-strong: rgba(74,124,111,0.25);
+      --radius-sm:     6px;
+      --radius-md:     10px;
+      --radius-lg:     14px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm);
+      color: var(--ink);
+      line-height: 1.7;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .site {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 28px 120px;
+    }
+
+    /* ── NAVIGATION ── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 40px 0 44px;
+      margin-bottom: 88px;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-mark { display: flex; flex-direction: column; gap: 3px; }
+    .nav-name {
+      font-family: 'Lora', serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      text-decoration: none;
+    }
+    .nav-role {
+      font-size: 11px;
+      color: var(--ink-light);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--ink-mid);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--sage); }
+
+    /* ── SECTION HEADERS ── */
+    .sec-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 52px;
+    }
+    .sec-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      white-space: nowrap;
+    }
+    .sec-line { flex: 1; height: 1px; background: var(--border); }
+
+    /* ── HERO ── */
+    .hero {
+      margin-bottom: 100px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.1s ease forwards;
+    }
+    .hero-question {
+      font-family: 'Lora', serif;
+      font-size: 13px;
+      font-style: italic;
+      color: var(--ink-light);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-family: 'Lora', serif;
+      font-size: 46px;
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin-bottom: 32px;
+      max-width: 600px;
+    }
+    .hero h1 em { font-style: italic; color: var(--sage); }
+    .hero-bio {
+      font-size: 16px;
+      color: var(--ink-mid);
+      max-width: 520px;
+      line-height: 1.8;
+      margin-bottom: 14px;
+      font-weight: 300;
+    }
+    .hero-bio b { font-weight: 500; color: var(--ink); }
+    .hero-sub {
+      font-family: 'Lora', serif;
+      font-size: 14px;
+      font-style: italic;
+      color: var(--ink-light);
+      max-width: 500px;
+      line-height: 1.75;
+      margin-bottom: 40px;
+    }
+    .cta-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .btn-p {
+      background: var(--sage);
+      color: white;
+      padding: 11px 26px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: background 0.2s;
+      display: inline-block;
+    }
+    .btn-p:hover { background: var(--sage-dark); }
+    .btn-o {
+      background: transparent;
+      color: var(--ink-mid);
+      padding: 11px 26px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 400;
+      text-decoration: none;
+      border: 1px solid var(--border-strong);
+      letter-spacing: 0.02em;
+      transition: border-color 0.2s, color 0.2s;
+      display: inline-block;
+    }
+    .btn-o:hover { border-color: var(--sage); color: var(--sage); }
+
+    /* ── POV STRIP ── */
+    .pov-strip {
+      background: var(--warm-dark);
+      border-left: 3px solid var(--sage);
+      padding: 22px 26px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin-bottom: 100px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.18s ease forwards;
+    }
+    .pov-strip p {
+      font-family: 'Lora', serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--ink-mid);
+      line-height: 1.8;
+    }
+    .pov-strip p b { font-style: normal; font-weight: 500; color: var(--ink); }
+
+    /* ── PILLARS ── */
+    .pillars-section {
+      margin-bottom: 100px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.22s ease forwards;
+    }
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .pillar {
+      padding: 26px 22px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+    }
+    .pillar-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: var(--sage-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .pillar-icon svg {
+      width: 16px; height: 16px;
+      stroke: var(--sage); fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .pillar h3 {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+      line-height: 1.4;
+    }
+    .pillar p { font-size: 13px; color: var(--ink-mid); line-height: 1.65; }
+
+    /* ── ABOUT ── */
+    .about-section {
+      margin-bottom: 100px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.26s ease forwards;
+    }
+    .about-lead {
+      font-family: 'Lora', serif;
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.45;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 44px;
+      max-width: 620px;
+    }
+    .about-lead em { font-style: italic; color: var(--sage); }
+
+    .story-block {
+      display: grid;
+      grid-template-columns: 3px 1fr;
+      gap: 28px;
+      margin-bottom: 44px;
+    }
+    .story-rule {
+      width: 3px;
+      background: var(--sage);
+      border-radius: 2px;
+      margin-top: 4px;
+    }
+    .story-era {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 10px;
+    }
+    .story-content h3 {
+      font-family: 'Lora', serif;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 12px;
+      letter-spacing: -0.015em;
+      line-height: 1.35;
+    }
+    .story-content p {
+      font-size: 15px;
+      color: var(--ink-mid);
+      line-height: 1.8;
+      margin-bottom: 10px;
+      font-weight: 300;
+    }
+    .story-content p:last-child { margin-bottom: 0; }
+    .story-content p b { font-weight: 500; color: var(--ink); }
+
+    .insight-pull {
+      background: var(--warm-dark);
+      border-left: 3px solid var(--sage);
+      padding: 22px 26px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin: 36px 0 44px 31px;
+    }
+    .insight-pull p {
+      font-family: 'Lora', serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--ink-mid);
+      line-height: 1.8;
+    }
+    .insight-pull p b { font-style: normal; font-weight: 500; color: var(--ink); }
+
+    .now-block {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px 36px;
+      margin-top: 8px;
+    }
+    .now-block h3 {
+      font-family: 'Lora', serif;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 14px;
+      letter-spacing: -0.015em;
+      line-height: 1.35;
+    }
+    .now-block p {
+      font-size: 15px;
+      color: var(--ink-mid);
+      line-height: 1.8;
+      font-weight: 300;
+      margin-bottom: 10px;
+    }
+    .now-block p:last-child { margin-bottom: 0; }
+    .now-block p b { font-weight: 500; color: var(--ink); }
+    .open-to { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+    .open-tag {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-strong);
+      color: var(--sage-dark);
+      background: var(--sage-light);
+      letter-spacing: 0.02em;
+    }
+
+    /* ── WORK ── */
+    .work-section {
+      margin-bottom: 100px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.3s ease forwards;
+    }
+    .work-item {
+      display: grid;
+      grid-template-columns: 64px 1fr auto;
+      gap: 22px;
+      align-items: start;
+      padding: 30px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: opacity 0.18s;
+      text-decoration: none;
+      color: inherit;
+    }
+    .work-item:first-of-type { border-top: 1px solid var(--border); }
+    .work-item:hover { opacity: 0.65; }
+    .work-yr {
+      font-size: 12px;
+      color: var(--ink-light);
+      padding-top: 2px;
+      font-variant-numeric: tabular-nums;
+    }
+    .work-context {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 7px;
+    }
+    .work-body h3 {
+      font-family: 'Lora', serif;
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 8px;
+      letter-spacing: -0.015em;
+      line-height: 1.35;
+    }
+    .work-body p {
+      font-size: 13px;
+      color: var(--ink-mid);
+      line-height: 1.65;
+      margin-bottom: 12px;
+    }
+    .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tag {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: var(--sage-light);
+      color: var(--sage-dark);
+      letter-spacing: 0.02em;
+    }
+    .tag.amber { background: var(--amber-light); color: var(--amber); }
+    .tag.neutral { background: var(--warm-dark); color: var(--ink-mid); }
+    .conf-note {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 10px;
+    }
+    .conf-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--ink-light);
+      opacity: 0.4;
+      flex-shrink: 0;
+    }
+    .conf-note span {
+      font-size: 11px;
+      color: var(--ink-light);
+      font-style: italic;
+      font-family: 'Lora', serif;
+    }
+    .work-arrow {
+      font-size: 18px;
+      color: var(--ink-light);
+      padding-top: 4px;
+      transition: transform 0.18s, color 0.18s;
+    }
+    .work-item:hover .work-arrow { transform: translateX(4px); color: var(--sage); }
+
+    /* ── WRITING ── */
+    .writing-section {
+      margin-bottom: 100px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.34s ease forwards;
+    }
+    .writing-item {
+      padding: 26px 0;
+      border-bottom: 1px solid var(--border);
+      transition: opacity 0.18s;
+      cursor: default;
+    }
+    .writing-item:first-of-type { border-top: 1px solid var(--border); }
+    .w-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .w-type {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+    .w-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-light); }
+    .w-status {
+      font-size: 12px;
+      color: var(--ink-light);
+      font-style: italic;
+      font-family: 'Lora', serif;
+    }
+    .writing-item h3 {
+      font-family: 'Lora', serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+      line-height: 1.4;
+    }
+    .writing-item p { font-size: 13px; color: var(--ink-mid); line-height: 1.65; }
+
+    /* ── CONTACT ── */
+    .contact-section {
+      opacity: 0;
+      animation: fadeUp 0.7s 0.38s ease forwards;
+    }
+    .contact-inner {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 56px 48px;
+      text-align: center;
+    }
+    .contact-inner h2 {
+      font-family: 'Lora', serif;
+      font-size: 32px;
+      font-weight: 400;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      line-height: 1.25;
+    }
+    .contact-inner h2 em { font-style: italic; color: var(--sage); }
+    .contact-inner p {
+      font-size: 15px;
+      color: var(--ink-mid);
+      margin-bottom: 32px;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.75;
+      font-weight: 300;
+    }
+    .contact-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-top: 80px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer p { font-size: 12px; color: var(--ink-light); }
+    footer a { font-size: 12px; color: var(--ink-light); text-decoration: none; }
+    footer a:hover { color: var(--sage); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 32px; }
+      .about-lead { font-size: 20px; }
+      .pillars { grid-template-columns: 1fr; }
+      .work-item { grid-template-columns: 48px 1fr; }
+      .work-arrow { display: none; }
+      nav { flex-direction: column; gap: 18px; align-items: flex-start; }
+      .nav-links { gap: 18px; }
+      .contact-inner { padding: 36px 24px; }
+      .now-block { padding: 24px 22px; }
+      .insight-pull { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="site">
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-mark">
+      <a class="nav-name" href="#">Sambhavana Priyadarsini</a>
+      <span class="nav-role">Product &amp; Program Management</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#writing">Writing</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-question">What happens to users after the product ships?</p>
+    <h1>I build from<br>the <em>gap.</em></h1>
+    <p class="hero-bio">
+      Between <b>what's technically possible,</b> what users actually need,
+      and what's responsible to put into the world — that's where I do my best work.
+    </p>
+    <p class="hero-sub">
+      4 years as a TPM at Microsoft shipping enterprise products at scale.
+      MBA at UVA Darden. Now moving into PM and TPM roles at AI-first companies
+      where that gap matters most.
+    </p>
+    <div class="cta-row">
+      <a class="btn-p" href="#work">See my work</a>
+      <a class="btn-o" href="#contact">Get in touch</a>
+    </div>
+  </section>
+
+  <!-- POV STRIP -->
+  <div class="pov-strip">
+    <p>I've spent four years in the translation layer between engineers and users — close enough to the code to know when a technical decision is actually a product decision, and curious enough about users to keep asking <b>why</b> until I find the real problem underneath the one they described.</p>
+  </div>
+
+  <!-- HOW I WORK -->
+  <section class="pillars-section">
+    <div class="sec-header">
+      <span class="sec-label">How I work</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3>Technically fluent, human-first</h3>
+        <p>I can read the architecture diagram and interview the user on the same day. That combination changes which questions I ask in both rooms.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <h3>Curious before conclusive</h3>
+        <p>I question the premise before answering the question. The most useful insight I've had at work started with refusing the framing I was given.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <h3>Responsible at scale</h3>
+        <p>Shipping isn't the finish line. I think about what happens to real users — including the ones who weren't in the design session — after something is live.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about-section" id="about">
+    <div class="sec-header">
+      <span class="sec-label">About</span>
+      <div class="sec-line"></div>
+    </div>
+
+    <p class="about-lead">I started as someone who wanted to understand how systems work. I'm still that person — the systems just got <em>more interesting.</em></p>
+
+    <div class="story-block">
+      <div class="story-rule"></div>
+      <div class="story-content">
+        <div class="story-era">The beginning — B.Tech CS</div>
+        <h3>I came to engineering because I liked figuring out how things worked.</h3>
+        <p>Not just the code — the logic underneath it. Why does this system behave this way? What breaks when you push it? Computer science gave me a language for asking those questions precisely. I didn't know then that I'd spend my career using that instinct on problems much messier than any codebase.</p>
+      </div>
+    </div>
+
+    <div class="story-block">
+      <div class="story-rule"></div>
+      <div class="story-content">
+        <div class="story-era">Microsoft — 4 years as a TPM</div>
+        <h3>I got good at execution. Then I noticed what execution kept missing.</h3>
+        <p>Four years shipping enterprise cloud products across global markets taught me what it means to coordinate complexity — 300+ stakeholders, five time zones, real organizations depending on things working. I got good at it.</p>
+        <p>But somewhere in there, I started noticing a gap nobody was owning: <b>the space between what we were building and what users actually needed it to do.</b> Engineers had their lane. Stakeholders had their asks. But the question of whether we were solving the right problem — that one floated. I kept stepping into it. Eventually I realized that wasn't a habit, it was a signal.</p>
+      </div>
+    </div>
+
+    <div class="insight-pull">
+      <p>Then, in my final months at Microsoft, something shifted in the world. <b>LLMs arrived at commercial scale</b> — and every company I worked with started rushing to deploy AI in some form. What struck me wasn't the technology. It was the gap it exposed: companies knew they needed AI, but didn't know what problem they were actually solving for their customers. <b>The technical ambition was everywhere. The product thinking was scarce.</b> That gap was where I wanted to work.</p>
+    </div>
+
+    <div class="story-block">
+      <div class="story-rule"></div>
+      <div class="story-content">
+        <div class="story-era">UVA Darden — MBA</div>
+        <h3>I went to business school to understand what drives the decisions I kept inheriting.</h3>
+        <p>Four years of execution had taught me how businesses move. Darden taught me <b>why they move that way</b> — what drives innovation cycles, how companies differentiate, what makes a business decision actually rational given the constraints it's operating under.</p>
+        <p>But the most important thing I learned wasn't in a framework. It was a quieter realization: <b>harm from technology is real, and it's usually a product decision.</b> Not a policy failure, not an engineering bug — a product decision someone made, often with good intentions, without thinking through what happens to real users downstream. That changed what I think a PM's job actually is.</p>
+      </div>
+    </div>
+
+    <div class="now-block">
+      <div class="story-era">Now — what I'm looking for</div>
+      <h3>I want to build products that solve real problems without introducing new ones.</h3>
+      <p>That means AI-first companies where the technical decisions and the product decisions are genuinely intertwined — where responsibility has to be in the foundation, not bolted on at launch.</p>
+      <p>I'm open to both <b>PM and TPM roles</b> depending on the team and the problem. What I care about is being close enough to the product decisions to influence them — whether that's owning them outright or shaping the conditions that make them better.</p>
+      <p>Graduating from Darden in May 2026, STEM OPT eligible, ready to move on the right opportunity.</p>
+      <div class="open-to">
+        <span class="open-tag">Product Management</span>
+        <span class="open-tag">Technical Program Management</span>
+        <span class="open-tag">AI-first companies</span>
+        <span class="open-tag">Available May 2026</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section class="work-section" id="work">
+    <div class="sec-header">
+      <span class="sec-label">Work &amp; Portfolio</span>
+      <div class="sec-line"></div>
+    </div>
+
+    <a class="work-item" href="#">
+      <div class="work-yr">2024</div>
+      <div class="work-body">
+        <div class="work-context">Case Study</div>
+        <h3>Collaboration platform for a regulated financial institution</h3>
+        <p>Led user research, defined MVP scope, and drove adoption for an enterprise integration serving 300+ stakeholders across compliance-sensitive workflows. The core insight: adoption was a product problem, not a communication problem.</p>
+        <div class="tags">
+          <span class="tag">User Research</span>
+          <span class="tag">Enterprise</span>
+          <span class="tag">Adoption Strategy</span>
+        </div>
+        <div class="conf-note">
+          <div class="conf-dot"></div>
+          <span>Details shared selectively — available in conversation</span>
+        </div>
+      </div>
+      <div class="work-arrow">→</div>
+    </a>
+
+    <a class="work-item" href="#">
+      <div class="work-yr">2025</div>
+      <div class="work-body">
+        <div class="work-context">Product Teardown</div>
+        <h3>Claude Projects — what it gets right, and what I'd change</h3>
+        <p>A PM analysis of how Anthropic's Projects feature handles persistent context. Who it actually serves, what the north star metric should be, and the one thing I'd test first.</p>
+        <div class="tags">
+          <span class="tag amber">Teardown</span>
+          <span class="tag amber">AI Products</span>
+        </div>
+      </div>
+      <div class="work-arrow">→</div>
+    </a>
+
+    <a class="work-item" href="#">
+      <div class="work-yr">2025</div>
+      <div class="work-body">
+        <div class="work-context">Mini PRD</div>
+        <h3>AI-powered status updates for engineering leads</h3>
+        <p>Full product requirements for an AI feature that auto-drafts weekly project summaries inside Jira. Problem statement, user personas, success metrics at 30/60/90 days, and open risks.</p>
+        <div class="tags">
+          <span class="tag amber">PRD</span>
+          <span class="tag">Developer Tools</span>
+          <span class="tag">AI Features</span>
+        </div>
+      </div>
+      <div class="work-arrow">→</div>
+    </a>
+
+    <a class="work-item" href="#">
+      <div class="work-yr">2025</div>
+      <div class="work-body">
+        <div class="work-context">Side Project</div>
+        <h3>VuGru — full-stack web application</h3>
+        <p>Built end-to-end: React frontend, Node.js backend. Started during Darden's Coding with GPT course. Exists because I wanted to understand what it actually feels like to ship, not just spec.</p>
+        <div class="tags">
+          <span class="tag neutral">React</span>
+          <span class="tag neutral">Node.js</span>
+          <span class="tag neutral">Built it myself</span>
+        </div>
+      </div>
+      <div class="work-arrow">→</div>
+    </a>
+
+  </section>
+
+  <!-- WRITING -->
+  <section class="writing-section" id="writing">
+    <div class="sec-header">
+      <span class="sec-label">Writing &amp; Thinking</span>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="writing-item">
+      <div class="w-meta">
+        <span class="w-type">Product Thinking</span>
+        <div class="w-dot"></div>
+        <span class="w-status">Publishing soon</span>
+      </div>
+      <h3>Echo chambers are a product decision, not an algorithm problem</h3>
+      <p>What measurable interventions actually work in recommendation systems, what the engagement tradeoffs look like, and why most companies frame this wrong from the start.</p>
+    </div>
+
+    <div class="writing-item">
+      <div class="w-meta">
+        <span class="w-type">Responsible AI</span>
+        <div class="w-dot"></div>
+        <span class="w-status">Publishing soon</span>
+      </div>
+      <h3>Content moderation for an LLM API: a product requirements problem</h3>
+      <p>Not a policy argument — a PM exercise. What are the success metrics? Who are the users? What does a good launch look like at 30 days, and what breaks at scale?</p>
+    </div>
+
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact-section" id="contact">
+    <div class="contact-inner">
+      <h2>Let's talk about <em>the gap.</em></h2>
+      <p>I'm looking for PM and TPM roles at AI-first companies where technical depth and product thinking both matter. Open to conversations.</p>
+      <div class="contact-links">
+        <a class="btn-p" href="mailto:your@email.com">Email me</a>
+        <a class="btn-o" href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn-o" href="https://github.com/sambhavana" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn-o" href="resume.pdf" target="_blank">Resume</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Sambhavana Priyadarsini</p>
+    <a href="mailto:your@email.com">your@email.com</a>
+  </footer>
+
+</div>
+
+</body>
+</html>
