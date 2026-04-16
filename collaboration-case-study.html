@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Collaboration Platform for a Regulated Financial Institution — Sambhavana Priyadarsini</title>
+  <meta name="description" content="A PM case study on building a bidirectional ADO-Jira integration for a European financial institution. By Sambhavana Priyadarsini." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sage:          #4a7c6f;
+      --sage-light:    #e8f0ee;
+      --sage-dark:     #2e5248;
+      --ink:           #1a1d1c;
+      --ink-mid:       #4a504e;
+      --ink-light:     #8a918f;
+      --warm:          #f8f6f1;
+      --warm-dark:     #f0ede5;
+      --white:         #ffffff;
+      --amber:         #b87333;
+      --amber-light:   #fdf0e3;
+      --border:        rgba(74,124,111,0.13);
+      --border-strong: rgba(74,124,111,0.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm);
+      color: var(--ink);
+      line-height: 1.7;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    nav {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 36px 28px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-name {
+      font-family: 'Lora', serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      text-decoration: none;
+    }
+    .nav-back {
+      font-size: 12px;
+      color: var(--ink-light);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--sage); }
+
+    .article-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 64px 28px 120px;
+    }
+
+    .article-header {
+      margin-bottom: 56px;
+      animation: fadeUp 0.6s ease both;
+    }
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .meta-type {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sage);
+    }
+    .meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-light); flex-shrink: 0; }
+    .meta-date { font-size: 12px; color: var(--ink-light); }
+    .meta-conf {
+      font-size: 11px;
+      color: var(--ink-light);
+      font-style: italic;
+      font-family: 'Lora', serif;
+    }
+
+    .article-header h1 {
+      font-family: 'Lora', serif;
+      font-size: 34px;
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .article-header .subhead {
+      font-size: 14px;
+      color: var(--ink-light);
+      letter-spacing: 0.03em;
+      margin-bottom: 24px;
+      font-style: italic;
+      font-family: 'Lora', serif;
+    }
+    .article-dek {
+      font-size: 17px;
+      color: var(--ink-mid);
+      line-height: 1.75;
+      font-weight: 300;
+      font-family: 'Lora', serif;
+      font-style: italic;
+      border-left: 3px solid var(--sage);
+      padding-left: 20px;
+    }
+
+    .article-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 40px 0;
+    }
+
+    /* METRICS ROW */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 0 0 52px;
+    }
+    .metric-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 16px;
+      text-align: center;
+    }
+    .metric-number {
+      font-family: 'Lora', serif;
+      font-size: 26px;
+      font-weight: 500;
+      color: var(--sage);
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+    .metric-label {
+      font-size: 12px;
+      color: var(--ink-light);
+      line-height: 1.4;
+    }
+
+    .article-body { animation: fadeUp 0.6s 0.1s ease both; }
+
+    .article-body p {
+      font-size: 16px;
+      color: var(--ink-mid);
+      line-height: 1.85;
+      margin-bottom: 24px;
+      font-weight: 300;
+    }
+    .article-body p b { font-weight: 500; color: var(--ink); }
+    .article-body p:last-of-type { margin-bottom: 0; }
+
+    .article-body h2 {
+      font-family: 'Lora', serif;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--ink);
+      letter-spacing: -0.015em;
+      line-height: 1.3;
+      margin: 52px 0 18px;
+    }
+
+    .pull-quote {
+      background: var(--warm-dark);
+      border-left: 3px solid var(--sage);
+      padding: 22px 26px;
+      border-radius: 0 6px 6px 0;
+      margin: 36px 0;
+    }
+    .pull-quote p {
+      font-family: 'Lora', serif;
+      font-size: 17px !important;
+      font-style: italic;
+      color: var(--ink-mid) !important;
+      line-height: 1.7 !important;
+      margin-bottom: 0 !important;
+    }
+    .pull-quote p b {
+      font-style: normal;
+      font-weight: 500;
+      color: var(--ink) !important;
+    }
+
+    .insight-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px 28px;
+      margin: 36px 0;
+    }
+    .insight-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 10px;
+    }
+    .insight-box p {
+      font-size: 15px !important;
+      margin-bottom: 0 !important;
+    }
+
+    .article-author {
+      margin-top: 72px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .author-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--sage-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Lora', serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--sage-dark);
+      flex-shrink: 0;
+    }
+    .author-name { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+    .author-bio { font-size: 13px; color: var(--ink-mid); line-height: 1.5; }
+    .author-bio a { color: var(--sage); text-decoration: none; }
+    .author-bio a:hover { text-decoration: underline; }
+
+    .back-link-wrap {
+      margin-top: 56px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+    .back-link {
+      font-size: 13px;
+      color: var(--ink-light);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--sage); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .article-header h1 { font-size: 24px; }
+      .article-body p { font-size: 15px; }
+      .metrics-row { grid-template-columns: 1fr 1fr; }
+      nav { padding: 24px 20px 0; }
+      .article-wrap { padding: 44px 20px 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-name" href="index.html">Sambhavana Priyadarsini</a>
+  <a class="nav-back" href="index.html">← Back to portfolio</a>
+</nav>
+
+<div class="article-wrap">
+
+  <header class="article-header">
+    <div class="article-meta">
+      <span class="meta-type">Case Study</span>
+      <div class="meta-dot"></div>
+      <span class="meta-date">Microsoft — 2023</span>
+      <div class="meta-dot"></div>
+      <span class="meta-conf">Client details withheld per confidentiality</span>
+    </div>
+    <h1>Collaboration Platform for a Regulated Financial Institution</h1>
+    <p class="subhead">Enterprise engagement at Microsoft — Technical Program Manager</p>
+    <p class="article-dek">How I turned a coordination problem nobody owned into a product problem I could solve — and what I learned about adoption along the way.</p>
+  </header>
+
+  <div class="metrics-row">
+    <div class="metric-card">
+      <div class="metric-number">6→4 wks</div>
+      <div class="metric-label">Architecture setup time reduced</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-number">300+</div>
+      <div class="metric-label">Stakeholders across two organizations</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-number">3 wks</div>
+      <div class="metric-label">Pilot to full adoption — no mandates</div>
+    </div>
+  </div>
+
+  <div class="article-divider"></div>
+
+  <div class="article-body">
+
+    <h2>Context</h2>
+    <p>I was a Technical Program Manager on an enterprise engagement supporting a large-scale cloud migration program at a regulated financial institution in Europe. The program involved two organizations running entirely separate toolchains — one team on Azure DevOps, the other on Jira, with no cross-system visibility. My role nominally covered program coordination. Nobody asked me to fix the tooling problem.</p>
+
+    <h2>The Problem</h2>
+    <p>Before a single application could begin migrating, teams spent six weeks on architecture setup alone — not because the work was technically complex, but because coordination was broken. Every status update had to be manually duplicated. Five nightly calls per week existed solely to keep both sides informed of information that should have been self-evident. None of it was searchable. None of it was auditable.</p>
+
+    <div class="pull-quote">
+      <p>The two teams weren't blocked on technology — they were blocked on visibility. I recognized that the coordination overhead wasn't a communication problem. <b>It was a product problem.</b> There was no shared source of truth, so humans became the integration layer. That's a solvable problem.</p>
+    </div>
+
+    <h2>Discovery</h2>
+    <p>I didn't survey all 300 stakeholders or commission a study. I watched how the client's program lead — responsible for coordinating across both organizations — spent his time. He was the most visible symptom: spending hours each day re-entering status information that already existed in one system or the other.</p>
+
+    <p>When I mapped what was actually happening, the coordination tax was staggering — and completely invisible to anyone who hadn't looked for it.</p>
+
+    <div class="insight-box">
+      <div class="insight-label">Core user need</div>
+      <p>Both teams need to work in their existing tools while sharing one source of truth. That constraint — <b>don't force either team to change their toolchain</b> — shaped every product decision I made.</p>
+    </div>
+
+    <h2>What I Built and Why</h2>
+    <p>I designed and built a bidirectional ADO-Jira integration: work items, status updates, and dependencies synced across both systems in real time. Either team could update their native tool; the other side saw it instantly. No duplicate entry. No nightly reconciliation calls.</p>
+
+    <p>The key product decision was <b>not replacing either tool.</b> I could have proposed a unified platform — one system for everyone. I didn't, because I knew adoption would fail. In a regulated financial environment, tool changes require compliance review, security approval, and change management processes that take months. Forcing tool consolidation would have killed the program. Working within existing systems meant the integration could be treated as infrastructure, not a product rollout.</p>
+
+    <h2>Rollout: The Pilot-First Approach</h2>
+    <p>I didn't ask for permission to fix the coordination problem organization-wide. I found one team willing to try something different, ran a two-week pilot — two days to set up and onboard, ten days of live use — and let the results generate their own case.</p>
+
+    <p>When I approached other team leads to expand, I didn't pitch the solution. I asked each of them to walk me through their current coordination process, then reflected the costs back: <em>you're running five nightly status calls a week. None of it is searchable. None of it is auditable. That's the coordination tax you're paying before anyone does any real work.</em> By the time the conversation ended, they had articulated the problem themselves. The solution almost didn't need selling.</p>
+
+    <div class="pull-quote">
+      <p>This wasn't a communication strategy. It was a discovery process — <b>making the status quo feel costly before introducing an alternative.</b></p>
+    </div>
+
+    <h2>Results</h2>
+    <p>Architecture setup time dropped from six weeks to four. The program — 300+ stakeholders across two organizations — moved from pilot to full adoption in three weeks. Every person opted in. No mandates, no escalations, no change management theater.</p>
+    <p>The client's program lead went from spending significant daily time on manual status reconciliation to running coordination asynchronously. The nightly calls became unnecessary.</p>
+
+    <h2>What I Learned</h2>
+    <p><b>Adoption is a product problem, not a communication problem.</b> I spent too much time early in the engagement explaining what I'd built. The moment I switched to making the alternative feel costly — helping people name what they were already losing — everything accelerated.</p>
+
+    <p>The insight that stuck: people don't resist change because they don't understand the solution. They resist because they haven't yet felt the weight of the problem.</p>
+
+    <h2>What I'd Do Differently</h2>
+    <p>I'd instrument the pilot more deliberately. I measured adoption — everyone opted in — but I didn't capture leading indicators during the two-week trial: how often people checked the integration, where they got confused, what questions they asked in the first 48 hours. Better activation data from the pilot would have made the expansion conversation even sharper, and would have given me a clearer picture of what onboarding friction to eliminate before scaling.</p>
+
+  </div>
+
+  <div class="article-author">
+    <div class="author-avatar">SP</div>
+    <div>
+      <div class="author-name">Sambhavana Priyadarsini</div>
+      <div class="author-bio">MBA candidate at UVA Darden. Former TPM at Microsoft. Writing about AI products, product strategy, and the gap between what gets built and what users actually need. <a href="index.html">Portfolio →</a></div>
+    </div>
+  </div>
+
+  <div class="back-link-wrap">
+    <a class="back-link" href="index.html">← Back to portfolio</a>
+  </div>
+
+</div>
+
+</body>
+</html>
