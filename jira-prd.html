@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PRD: AI-Powered Weekly Status Summaries for Jira — Sambhavana Priyadarsini</title>
+  <meta name="description" content="A product requirements document for an AI feature that auto-drafts weekly project summaries inside Jira. By Sambhavana Priyadarsini." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sage:          #4a7c6f;
+      --sage-light:    #e8f0ee;
+      --sage-dark:     #2e5248;
+      --ink:           #1a1d1c;
+      --ink-mid:       #4a504e;
+      --ink-light:     #8a918f;
+      --warm:          #f8f6f1;
+      --warm-dark:     #f0ede5;
+      --white:         #ffffff;
+      --amber:         #b87333;
+      --amber-light:   #fdf0e3;
+      --border:        rgba(74,124,111,0.13);
+      --border-strong: rgba(74,124,111,0.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm);
+      color: var(--ink);
+      line-height: 1.7;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    nav {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 36px 28px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-name {
+      font-family: 'Lora', serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      text-decoration: none;
+    }
+    .nav-back {
+      font-size: 12px;
+      color: var(--ink-light);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--sage); }
+
+    .article-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 64px 28px 120px;
+    }
+
+    /* HEADER */
+    .article-header {
+      margin-bottom: 48px;
+      animation: fadeUp 0.6s ease both;
+    }
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .meta-type {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+    .meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-light); flex-shrink: 0; }
+    .meta-date { font-size: 12px; color: var(--ink-light); }
+    .meta-status {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: var(--sage-light);
+      color: var(--sage-dark);
+      letter-spacing: 0.03em;
+    }
+
+    .article-header h1 {
+      font-family: 'Lora', serif;
+      font-size: 34px;
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .article-header h1 em { font-style: italic; color: var(--sage); }
+    .article-header .subhead {
+      font-size: 14px;
+      color: var(--ink-light);
+      font-style: italic;
+      font-family: 'Lora', serif;
+      margin-bottom: 24px;
+    }
+    .article-dek {
+      font-size: 17px;
+      color: var(--ink-mid);
+      line-height: 1.75;
+      font-weight: 300;
+      font-family: 'Lora', serif;
+      font-style: italic;
+      border-left: 3px solid var(--amber);
+      padding-left: 20px;
+    }
+
+    .article-divider { height: 1px; background: var(--border); margin: 40px 0; }
+
+    /* TOC */
+    .toc {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px 28px;
+      margin-bottom: 52px;
+    }
+    .toc-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin-bottom: 14px;
+    }
+    .toc ol {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 24px;
+    }
+    .toc ol li a {
+      font-size: 13px;
+      color: var(--ink-mid);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s;
+    }
+    .toc ol li a:hover { color: var(--sage); }
+    .toc-num {
+      font-size: 11px;
+      color: var(--ink-light);
+      font-variant-numeric: tabular-nums;
+      min-width: 16px;
+    }
+
+    /* BODY */
+    .article-body { animation: fadeUp 0.6s 0.1s ease both; }
+
+    .article-body p {
+      font-size: 16px;
+      color: var(--ink-mid);
+      line-height: 1.85;
+      margin-bottom: 20px;
+      font-weight: 300;
+    }
+    .article-body p b { font-weight: 500; color: var(--ink); }
+
+    .article-body h2 {
+      font-family: 'Lora', serif;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--ink);
+      letter-spacing: -0.015em;
+      line-height: 1.3;
+      margin: 52px 0 16px;
+      padding-top: 8px;
+    }
+
+    /* PERSONA CARDS */
+    .persona-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0 32px;
+    }
+    .persona-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 22px 20px;
+    }
+    .persona-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .persona-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--sage-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--sage-dark);
+      flex-shrink: 0;
+    }
+    .persona-name { font-size: 14px; font-weight: 500; color: var(--ink); }
+    .persona-role { font-size: 12px; color: var(--ink-light); }
+    .persona-card p { font-size: 13px !important; color: var(--ink-mid) !important; line-height: 1.65 !important; margin-bottom: 0 !important; }
+
+    /* USER STORIES */
+    .story-list {
+      margin: 20px 0 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .story-item {
+      background: var(--warm-dark);
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 14px;
+      color: var(--ink-mid);
+      line-height: 1.65;
+    }
+    .story-item b { font-weight: 500; color: var(--ink); }
+
+    /* REQUIREMENTS */
+    .req-block {
+      margin: 20px 0;
+    }
+    .req-priority {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+    .req-priority.p0 { background: #fde8e8; color: #a32d2d; }
+    .req-priority.p1 { background: var(--amber-light); color: var(--amber); }
+    .req-priority.p2 { background: var(--sage-light); color: var(--sage-dark); }
+    .req-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .req-list li {
+      font-size: 14px;
+      color: var(--ink-mid);
+      line-height: 1.65;
+      padding-left: 16px;
+      position: relative;
+    }
+    .req-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--ink-light);
+    }
+    .req-list li b { font-weight: 500; color: var(--ink); }
+
+    /* METRICS */
+    .metric-highlight {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--sage);
+      border-radius: 0 10px 10px 0;
+      padding: 22px 24px;
+      margin: 20px 0;
+    }
+    .metric-highlight .metric-name {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 6px;
+    }
+    .metric-highlight p { font-size: 14px !important; color: var(--ink-mid) !important; line-height: 1.65 !important; margin-bottom: 0 !important; }
+    .metric-highlight p b { color: var(--ink) !important; }
+
+    /* RISKS */
+    .risk-block {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 22px 24px;
+      margin: 12px 0;
+    }
+    .risk-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .risk-block p { font-size: 13px !important; color: var(--ink-mid) !important; line-height: 1.65 !important; margin-bottom: 8px !important; }
+    .risk-block p:last-child { margin-bottom: 0 !important; }
+    .risk-mit {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 4px;
+    }
+
+    /* OPEN QUESTIONS */
+    .question-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .question-list li {
+      font-size: 15px;
+      color: var(--ink-mid);
+      line-height: 1.7;
+      padding: 14px 18px;
+      background: var(--warm-dark);
+      border-radius: 8px;
+      font-weight: 300;
+    }
+
+    /* TIMELINE */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    .timeline-phase {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--amber);
+      padding-top: 2px;
+    }
+    .timeline-desc {
+      font-size: 14px;
+      color: var(--ink-mid);
+      line-height: 1.65;
+    }
+
+    /* PULL QUOTE */
+    .pull-quote {
+      background: var(--warm-dark);
+      border-left: 3px solid var(--sage);
+      padding: 22px 26px;
+      border-radius: 0 6px 6px 0;
+      margin: 28px 0;
+    }
+    .pull-quote p {
+      font-family: 'Lora', serif;
+      font-size: 16px !important;
+      font-style: italic;
+      color: var(--ink-mid) !important;
+      line-height: 1.75 !important;
+      margin-bottom: 0 !important;
+    }
+    .pull-quote p b { font-style: normal; font-weight: 500; color: var(--ink) !important; }
+
+    /* AUTHOR */
+    .article-author {
+      margin-top: 72px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .author-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--sage-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Lora', serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--sage-dark);
+      flex-shrink: 0;
+    }
+    .author-name { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+    .author-bio { font-size: 13px; color: var(--ink-mid); line-height: 1.5; }
+    .author-bio a { color: var(--sage); text-decoration: none; }
+    .author-bio a:hover { text-decoration: underline; }
+
+    .back-link-wrap { margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .back-link {
+      font-size: 13px;
+      color: var(--ink-light);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--sage); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .article-header h1 { font-size: 24px; }
+      .persona-grid { grid-template-columns: 1fr; }
+      .toc ol { grid-template-columns: 1fr; }
+      .timeline-item { grid-template-columns: 60px 1fr; }
+      nav { padding: 24px 20px 0; }
+      .article-wrap { padding: 44px 20px 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-name" href="index.html">Sambhavana Priyadarsini</a>
+  <a class="nav-back" href="index.html">← Back to portfolio</a>
+</nav>
+
+<div class="article-wrap">
+
+  <header class="article-header">
+    <div class="article-meta">
+      <span class="meta-type">Mini PRD</span>
+      <div class="meta-dot"></div>
+      <span class="meta-date">April 2026</span>
+      <div class="meta-dot"></div>
+      <span class="meta-status">Draft</span>
+    </div>
+    <h1>AI-Powered Weekly Status Summaries <em>for Jira</em></h1>
+    <p class="subhead">Feature: AI-Powered Weekly Status Summaries — Author: Sambhavana Priyadarsini</p>
+    <p class="article-dek">TPMs and engineering managers spend 30–90 minutes every week aggregating data they don't generate. The raw material is already in Jira. The gap is signal extraction — and that's a solvable product problem.</p>
+  </header>
+
+  <div class="toc">
+    <div class="toc-label">Contents</div>
+    <ol>
+      <li><a href="#problem"><span class="toc-num">1</span> Problem Statement</a></li>
+      <li><a href="#goals"><span class="toc-num">2</span> Goals &amp; Non-Goals</a></li>
+      <li><a href="#personas"><span class="toc-num">3</span> User Personas</a></li>
+      <li><a href="#stories"><span class="toc-num">4</span> User Stories</a></li>
+      <li><a href="#requirements"><span class="toc-num">5</span> Functional Requirements</a></li>
+      <li><a href="#nonfunctional"><span class="toc-num">6</span> Non-Functional Requirements</a></li>
+      <li><a href="#metrics"><span class="toc-num">7</span> Success Metrics</a></li>
+      <li><a href="#risks"><span class="toc-num">8</span> Dependencies &amp; Risks</a></li>
+      <li><a href="#questions"><span class="toc-num">9</span> Open Questions</a></li>
+      <li><a href="#timeline"><span class="toc-num">10</span> Timeline</a></li>
+    </ol>
+  </div>
+
+  <div class="article-divider"></div>
+
+  <div class="article-body">
+
+    <h2 id="problem">1. Problem Statement</h2>
+    <p>TPMs and engineering managers spend 30–90 minutes before every weekly status meeting aggregating project data they don't generate — they only consume it. The raw material exists in Jira: ticket updates, sprint progress, blocker flags, assignee changes, status transitions. But <b>Jira is structured for querying, not for reading.</b> JQL retrieves the data; it was never designed to interpret it.</p>
+    <p>The gap between "data pulled from Jira" and "summary a stakeholder can act on" is still filled by a human, manually, every week. The pain is not data access. It is signal extraction. What counts as meaningful progress varies by team, project type, and sprint phase. A ticket moving from In Progress to In Review means something different on day two of a sprint than it does on day nine of ten. Without context-aware interpretation, raw Jira data produces either an exhaustive dump nobody reads or a shallow summary that misses what actually matters.</p>
+
+    <h2 id="goals">2. Goals and Non-Goals</h2>
+    <p><b>Goals:</b> Enable TPMs and engineering managers to generate an accurate, signal-weighted weekly summary of sprint activity across epics, assignees, blockers, and status changes. Reduce time spent on weekly status aggregation from 30–90 minutes to under five minutes. Produce summaries grounded in configurable relevance rules, not undifferentiated data passed directly to an LLM.</p>
+    <p><b>Non-Goals:</b> Single-ticket summarization and incident-related summary generation — this already exists natively in Jira; replicating it is not the opportunity. Formatted, stakeholder-ready report output in v1 — accurate signal consolidation ships first, prose polish is a v2 problem. Automated scheduling or delivery. Multi-project aggregation across separate Jira instances. Natural language configuration of the relevance layer.</p>
+
+    <h2 id="personas">3. User Personas</h2>
+    <div class="persona-grid">
+      <div class="persona-card">
+        <div class="persona-header">
+          <div class="persona-avatar">M</div>
+          <div>
+            <div class="persona-name">Maya</div>
+            <div class="persona-role">Technical Program Manager — Primary</div>
+          </div>
+        </div>
+        <p>Manages a 12-engineer program across three squads. Spends every Monday morning manually pulling updates, chasing missing context from three team leads, and translating ticket states into a coherent status email. Her definition of success: open the tool, generate a summary, make two edits, send it. Under ten minutes, start to finish.</p>
+      </div>
+      <div class="persona-card">
+        <div class="persona-header">
+          <div class="persona-avatar">A</div>
+          <div>
+            <div class="persona-name">Arjun</div>
+            <div class="persona-role">Engineering Manager — Secondary</div>
+          </div>
+        </div>
+        <p>Runs a two-week sprint cycle with eight engineers. Already knows roughly what happened this week — but producing a written summary for the VP update takes time he doesn't have. Wants a first draft that reflects what actually shipped, what's stuck, and what needs escalation. He'll edit it, but he doesn't want to write it from scratch.</p>
+      </div>
+    </div>
+
+    <h2 id="stories">4. User Stories</h2>
+    <div class="story-list">
+      <div class="story-item">As a <b>TPM</b>, I want to generate a weekly summary across all active epics and assignees so that I can send a status update to leadership without manually aggregating Jira data.</div>
+      <div class="story-item">As an <b>engineering manager</b>, I want to configure which epics and signals are relevant to my team so that the summary reflects my team's priorities, not generic ticket activity.</div>
+      <div class="story-item">As a <b>TPM</b>, I want to see which tickets were flagged as blockers or risks this week so that I can escalate the right items before they become program-level problems.</div>
+      <div class="story-item">As an <b>engineering manager</b>, I want the summary to distinguish between what shipped, what's in progress, and what's stalled so that my standup preparation takes minutes, not an hour.</div>
+    </div>
+
+    <h2 id="requirements">5. Functional Requirements</h2>
+
+    <div class="req-block">
+      <div class="req-priority p0">P0 — Must have for v1</div>
+      <ul class="req-list">
+        <li>Connect to a Jira project and pull the prior seven days of activity across specified epics, sprints, and assignees</li>
+        <li><b>Apply a relevance layer before passing data to the LLM</b> — configurable rules and thresholds that filter and weight signals (see below)</li>
+        <li>Pass the filtered, weighted signal set to the LLM with a structured prompt</li>
+        <li>Return a structured summary covering: what shipped, what's in progress, what's blocked, what's at risk</li>
+        <li>Allow the user to configure scope — which epics and assignees are included — before generation</li>
+      </ul>
+    </div>
+
+    <div class="pull-quote">
+      <p>The relevance layer is the core P0 requirement. It sits between raw Jira data and the LLM summarization step. Without it, the model has no basis for knowing what matters and will either over-weight recency, hallucinate significance, or produce summaries too hedged to be useful.</p>
+    </div>
+
+    <p>The relevance layer includes: <b>threshold rules</b> (tickets stalled beyond N days flagged as blockers regardless of label; sprint completion below a threshold triggers a risk signal), <b>change-type weighting</b> (status transitions carry more weight than comment activity; unassigned tickets in active sprints rank higher than backlog movement), and <b>team-configured priorities</b> (which epics are load-bearing, which assignees are on the critical path, the team's working definition of "done").</p>
+
+    <div class="req-block">
+      <div class="req-priority p1">P1 — Should have</div>
+      <ul class="req-list">
+        <li>Default relevance layer ruleset with manual override — so teams can generate a useful summary on first use without completing full configuration</li>
+        <li>Ability to flag individual summary items as inaccurate or irrelevant, feeding back into relevance layer calibration</li>
+        <li>Summary regeneration with adjusted scope or date range</li>
+      </ul>
+    </div>
+
+    <div class="req-block">
+      <div class="req-priority p2">P2 — Nice to have</div>
+      <ul class="req-list">
+        <li>Formatted, stakeholder-ready output with headers and sections styled for email or document use</li>
+        <li>Suggested escalation actions based on flagged risks</li>
+        <li>Learned relevance weighting based on which summaries users act on versus discard</li>
+      </ul>
+    </div>
+
+    <h2 id="nonfunctional">6. Non-Functional Requirements</h2>
+    <ul class="req-list" style="margin-top: 16px;">
+      <li><b>Performance:</b> Summary generation must complete in under 30 seconds for a standard two-week sprint scope.</li>
+      <li><b>Security:</b> Jira data must be processed strictly within the user's authorized permission scope. No summary should surface ticket content the requesting user could not access directly in Jira. Non-negotiable in regulated or enterprise environments.</li>
+      <li><b>Auditability:</b> Relevance layer rules must be inspectable — users should be able to see why a signal was included or excluded. This builds trust and enables calibration.</li>
+      <li><b>Scale:</b> The feature should support concurrent generation requests without degraded latency. Enterprise teams may have multiple users generating summaries on the same Monday morning.</li>
+    </ul>
+
+    <h2 id="metrics">7. Success Metrics</h2>
+
+    <div class="metric-highlight">
+      <div class="metric-name">North Star Metric</div>
+      <p><b>Weekly return rate over 30 days</b> — the percentage of users who generate a summary in week 2, 3, and 4 after first use. A user who returns weekly has integrated the feature into their actual workflow. A 40% week-4 return rate would signal the feature is replacing existing workflow rather than adding to it. Single-session usage is not a reliable signal: multiple generations in one session may indicate the user is fighting the product to get a usable output.</p>
+    </div>
+
+    <ul class="req-list" style="margin-top: 8px; margin-bottom: 20px;">
+      <li><b>Time-to-action:</b> how long between summary generation and the user acting on it (sending, copying, or presenting). Heavy editing before use indicates the relevance layer needs calibration.</li>
+      <li><b>Scope configuration rate:</b> what percentage of users configure their relevance layer beyond defaults. Low configuration may mean defaults are good enough, or that the configuration UI has too much friction.</li>
+      <li><b>Summary acceptance rate:</b> how often users send or use a summary without regenerating it.</li>
+    </ul>
+
+    <div class="metric-highlight" style="border-left-color: #a32d2d;">
+      <div class="metric-name" style="color: #a32d2d;">Guardrail Metric</div>
+      <p>Permission scope violations must remain at <b>zero.</b> If any summary surfaces data outside a user's Jira access level, trust in the feature collapses and the feature should be disabled. Trust is the baseline — everything else is optimization.</p>
+    </div>
+
+    <h2 id="risks">8. Dependencies and Risks</h2>
+
+    <p><b>Dependencies:</b> Jira API access with appropriate OAuth scoping per user. LLM integration layer with structured prompt templates. Relevance layer configuration infrastructure (rules storage, per-team settings).</p>
+
+    <div class="risk-block">
+      <div class="risk-title">Risk 1 — Poor Jira hygiene undermines summary quality</div>
+      <p>Many enterprise Jira instances have stale tickets, inconsistent status discipline, and incomplete assignee data. A summary built on bad inputs will be wrong regardless of how good the relevance layer is, and users will blame the feature.</p>
+      <div class="risk-mit">Mitigation</div>
+      <p>Surface a data quality signal before generation — flag if X% of in-scope tickets haven't been updated in more than N days and give users the option to exclude them. Don't silently generate a low-quality summary.</p>
+    </div>
+
+    <div class="risk-block">
+      <div class="risk-title">Risk 2 — Relevance layer defaults don't generalize</div>
+      <p>What counts as a blocker or a meaningful status change varies significantly across teams and project types. Defaults that work for a software sprint may misfire for a compliance-driven program.</p>
+      <div class="risk-mit">Mitigation</div>
+      <p>Ship with three default profiles (software sprint, compliance program, infrastructure migration) based on research with early users. Let teams switch profiles before full custom configuration.</p>
+    </div>
+
+    <div class="risk-block">
+      <div class="risk-title">Risk 3 — Users over-trust LLM output without reviewing it</div>
+      <p>Enterprise users under time pressure may send AI-generated summaries without reading them, creating reputational risk when the summary is wrong.</p>
+      <div class="risk-mit">Mitigation</div>
+      <p>Add a lightweight confirmation step — "You're about to send this summary. It was generated from Jira data as of [timestamp]." Friction by design, not accident.</p>
+    </div>
+
+    <h2 id="questions">9. Open Questions</h2>
+    <ul class="question-list">
+      <li>What is the right scope boundary for "weekly" — calendar week, sprint boundary, or rolling seven days? The answer likely differs by team type and should be configurable, but we need a sensible default.</li>
+      <li>How should teams initially configure the relevance layer — guided setup wizard, defaults with manual override, or inference from prior Jira activity patterns?</li>
+      <li>Should relevance weighting adapt over time based on which summaries users act on versus discard, and if so, how do we make that adaptation transparent rather than opaque?</li>
+      <li>How do we handle multi-team programs where a TPM needs a consolidated summary across projects owned by different teams with different configurations?</li>
+    </ul>
+
+    <h2 id="timeline">10. Timeline Estimate</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-phase">MVP<br>Wks 1–4</div>
+        <div class="timeline-desc">Jira API integration, relevance layer infrastructure with default ruleset, LLM summarization with structured prompt, basic scope configuration UI. Internal testing with two pilot teams.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-phase">v1<br>Wks 5–10</div>
+        <div class="timeline-desc">Default profile options (sprint / compliance / infrastructure), summary regeneration, data quality signal before generation, permission scope enforcement, latency optimization.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-phase">v2<br>Post-launch</div>
+        <div class="timeline-desc">Formatted output, learned relevance weighting, multi-project aggregation.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="article-author">
+    <div class="author-avatar">SP</div>
+    <div>
+      <div class="author-name">Sambhavana Priyadarsini</div>
+      <div class="author-bio">MBA candidate at UVA Darden. Former TPM at Microsoft. Writing about AI products, product strategy, and the gap between what gets built and what users actually need. <a href="index.html">Portfolio →</a></div>
+    </div>
+  </div>
+
+  <div class="back-link-wrap">
+    <a class="back-link" href="index.html">← Back to portfolio</a>
+  </div>
+
+</div>
+
+</body>
+</html>
