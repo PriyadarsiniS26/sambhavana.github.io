@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Content moderation for an LLM API: a product requirements problem — Sambhavana Priyadarsini</title>
+  <meta name="description" content="Not a policy argument. A PM exercise. By Sambhavana Priyadarsini." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sage:          #4a7c6f;
+      --sage-light:    #e8f0ee;
+      --sage-dark:     #2e5248;
+      --ink:           #1a1d1c;
+      --ink-mid:       #4a504e;
+      --ink-light:     #8a918f;
+      --warm:          #f8f6f1;
+      --warm-dark:     #f0ede5;
+      --white:         #ffffff;
+      --amber:         #b87333;
+      --amber-light:   #fdf0e3;
+      --border:        rgba(74,124,111,0.13);
+      --border-strong: rgba(74,124,111,0.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm);
+      color: var(--ink);
+      line-height: 1.7;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    nav {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 36px 28px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-name {
+      font-family: 'Lora', serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      text-decoration: none;
+    }
+    .nav-back {
+      font-size: 12px;
+      color: var(--ink-light);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--sage); }
+
+    .article-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 64px 28px 120px;
+    }
+
+    .article-header {
+      margin-bottom: 56px;
+      animation: fadeUp 0.6s ease both;
+    }
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .meta-type {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+    .meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-light); flex-shrink: 0; }
+    .meta-date { font-size: 12px; color: var(--ink-light); }
+    .meta-read { font-size: 12px; color: var(--ink-light); }
+
+    .article-header h1 {
+      font-family: 'Lora', serif;
+      font-size: 34px;
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin-bottom: 20px;
+    }
+    .article-dek {
+      font-size: 17px;
+      color: var(--ink-mid);
+      line-height: 1.75;
+      font-weight: 300;
+      font-family: 'Lora', serif;
+      font-style: italic;
+      border-left: 3px solid var(--amber);
+      padding-left: 20px;
+    }
+
+    .article-divider { height: 1px; background: var(--border); margin: 40px 0; }
+
+    .article-body { animation: fadeUp 0.6s 0.1s ease both; }
+
+    .article-body p {
+      font-size: 16px;
+      color: var(--ink-mid);
+      line-height: 1.85;
+      margin-bottom: 24px;
+      font-weight: 300;
+    }
+    .article-body p b { font-weight: 500; color: var(--ink); }
+
+    .article-body h2 {
+      font-family: 'Lora', serif;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--ink);
+      letter-spacing: -0.015em;
+      line-height: 1.3;
+      margin: 52px 0 18px;
+    }
+
+    .article-body h3 {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin: 36px 0 12px;
+    }
+
+    /* PERSONA BLOCKS */
+    .persona-block {
+      border-left: 3px solid var(--border-strong);
+      padding: 4px 0 4px 20px;
+      margin: 28px 0;
+    }
+    .persona-block .persona-name {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .persona-block p {
+      font-size: 15px !important;
+      margin-bottom: 0 !important;
+    }
+
+    /* PULL QUOTE */
+    .pull-quote {
+      background: var(--warm-dark);
+      border-left: 3px solid var(--sage);
+      padding: 22px 26px;
+      border-radius: 0 6px 6px 0;
+      margin: 36px 0;
+    }
+    .pull-quote p {
+      font-family: 'Lora', serif;
+      font-size: 17px !important;
+      font-style: italic;
+      color: var(--ink-mid) !important;
+      line-height: 1.75 !important;
+      margin-bottom: 0 !important;
+    }
+    .pull-quote p b { font-style: normal; font-weight: 500; color: var(--ink) !important; }
+
+    /* INSIGHT BOX */
+    .insight-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px 28px;
+      margin: 32px 0;
+    }
+    .insight-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 10px;
+    }
+    .insight-box p { font-size: 15px !important; margin-bottom: 0 !important; }
+
+    /* METRIC BLOCKS */
+    .metric-group { margin: 28px 0; }
+    .metric-item {
+      padding: 16px 20px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+    .metric-item.guardrail { border-left: 3px solid #a32d2d; }
+    .metric-item.primary { border-left: 3px solid var(--sage); }
+    .metric-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .metric-item p { font-size: 13px !important; color: var(--ink-mid) !important; line-height: 1.65 !important; margin-bottom: 0 !important; }
+
+    /* SCALE ITEMS */
+    .scale-item {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    .scale-item:first-child { border-top: 1px solid var(--border); }
+    .scale-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .scale-item p { font-size: 14px !important; color: var(--ink-mid) !important; line-height: 1.7 !important; margin-bottom: 0 !important; }
+
+    .article-author {
+      margin-top: 72px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .author-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--sage-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Lora', serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--sage-dark);
+      flex-shrink: 0;
+    }
+    .author-name { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+    .author-bio { font-size: 13px; color: var(--ink-mid); line-height: 1.5; }
+    .author-bio a { color: var(--sage); text-decoration: none; }
+    .author-bio a:hover { text-decoration: underline; }
+
+    .back-link-wrap { margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .back-link {
+      font-size: 13px;
+      color: var(--ink-light);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--sage); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .article-header h1 { font-size: 24px; }
+      .article-body p { font-size: 15px; }
+      nav { padding: 24px 20px 0; }
+      .article-wrap { padding: 44px 20px 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-name" href="index.html">Sambhavana Priyadarsini</a>
+  <a class="nav-back" href="index.html">← Back to portfolio</a>
+</nav>
+
+<div class="article-wrap">
+
+  <header class="article-header">
+    <div class="article-meta">
+      <span class="meta-type">Responsible AI</span>
+      <div class="meta-dot"></div>
+      <span class="meta-date">April 2026</span>
+      <div class="meta-dot"></div>
+      <span class="meta-read">12 min read</span>
+    </div>
+    <h1>Content moderation for an LLM API: a product requirements problem</h1>
+    <p class="article-dek">Not a policy argument. A PM exercise. What are the success metrics? Who are the users? What does a good launch look like at 30 days, and what breaks at scale?</p>
+  </header>
+
+  <div class="article-divider"></div>
+
+  <div class="article-body">
+
+    <p>In my Tech and Ethics course at Darden, we watched <em>Her</em>. The conversation that followed was the same conversation happening across boardrooms, policy panels, and conference keynotes right now: what happens when AI gets too close, too human, too uncontrolled? It's an important question. But it's not the one I kept thinking about.</p>
+
+    <p>Here's the quieter problem nobody talks about enough. When a company like Anthropic or OpenAI builds an AI model, they don't sell it directly to the person asking it questions. They sell access to it via an API to developers and businesses who then build their own products on top of it. A mental health app. A children's tutoring tool. A customer service bot for a bank. Each of these products is powered by the same underlying model, but the people using them are completely different, with completely different needs, vulnerabilities, and expectations.</p>
+
+    <p>The model provider sets outer limits: content that's never allowed under any circumstances. But everything in between is configured by the developer. They decide what their users can ask, what the AI will and won't engage with, how it behaves when something goes wrong. And most of them are making those decisions without a safety background, without a dedicated trust and safety team, and without a clear product interface that tells them what they should be thinking about for their specific context.</p>
+
+    <p>That gap between what the platform allows and what any given deployment should actually do is a product problem. This essay is about what it looks like to treat it like one.</p>
+
+    <h2>The Scope</h2>
+
+    <p>Content moderation for an LLM API isn't one problem. It's at least three: what gets baked into the model at training time, what gets filtered at inference, and how operators configure behavior for their specific use case. Each layer fails differently. Each has different owners.</p>
+
+    <p>This essay focuses on the third layer, operator configuration, because it's the least written about and arguably the most practically important. A misconfigured deployment doesn't just affect one user. It affects every user of that product, and the platform bears reputational and legal exposure for a decision made by someone who may have been a solo developer at 2am.</p>
+
+    <p>The design question: how do you make moderation configuration responsible by default, without requiring every developer to become a safety expert?</p>
+
+    <h2>The Users</h2>
+
+    <div class="persona-block">
+      <div class="persona-name">The solo developer</div>
+      <p>Building a consumer-facing product: a journaling app, a study tool, a creative writing assistant. No legal team. No safety review process. They've read the terms of service, agreed to usage policies, and genuinely intend to build something good. But they haven't thought through the harm surface of their specific context. They don't know what they don't know. This is the highest-risk operator category not because they're malicious, but because they're under-resourced and overconfident in good defaults.</p>
+    </div>
+
+    <div class="persona-block">
+      <div class="persona-name">The startup PM</div>
+      <p>Responsible for a product with real users and some organizational structure. Has investors who ask about trust and safety in due diligence. Has a legal person who reviews things occasionally. Needs moderation to be configurable enough to fit their use case, but also needs something they can defend to their board, to a regulator, to a journalist if something goes wrong. They will engage with configuration complexity if the tradeoffs are explained clearly. They won't engage if it reads like a legal document.</p>
+    </div>
+
+    <div class="persona-block">
+      <div class="persona-name">The enterprise integration lead</div>
+      <p>Deploying internally at a regulated company: financial services, healthcare, legal. Their concern isn't primarily harm to end users in the consumer sense. It's compliance, audit trails, and documentation they can show their legal team. They'll accept more friction. What they cannot accept is ambiguity. "The platform will use commercially reasonable efforts to prevent misuse" is not a sentence they can put in front of their General Counsel. They need commitments that are specific enough to be meaningful.</p>
+    </div>
+
+    <p>Three users, three completely different relationships to the same configuration product. The design has to work for all three, or you've built for a segment, not for a platform.</p>
+
+    <h2>The Product: Use-Case-Scoped Configuration with Forced Acknowledgment</h2>
+
+    <p>Most developers deploying an LLM don't need to invent the relevant harm taxonomy for their context. The platform already knows what harms are common in consumer wellness, in education, in security research, in adult content platforms. That knowledge exists. The product problem is surfacing it to the developer at the moment they need it, in a form they can actually act on.</p>
+
+    <p>The design: when a developer registers their application, they select a use case category. The system surfaces the top harm patterns observed in that category, the recommended default settings, and an explicit explanation of what each setting does and why it exists. The developer doesn't need expertise. They need legible defaults with explained tradeoffs.</p>
+
+    <p>The forced acknowledgment piece is what makes this more than a UX improvement. If a developer wants to deviate from a recommended default, turn off a safety filter or expand a permission, they have to explicitly confirm they've read why the default exists. Not a checkbox they click past. A specific statement of what they're doing and what risk they're accepting. This doesn't eliminate bad decisions. It creates accountability and a documented record, which shifts the liability question meaningfully and gives the platform's trust and safety team a clear escalation trigger when something goes wrong downstream.</p>
+
+    <div class="pull-quote">
+      <p>The use-case taxonomy needs to be treated as a living product artifact, not a launch deliverable. Without a named owner and a review cadence, it accumulates debt silently — until an operator in an undesigned category files a support ticket that reveals a moderation failure that's been happening for months.</p>
+    </div>
+
+    <p>At launch, you've anticipated the use cases you've seen. At 10x scale, you have operators in categories you didn't design for, selecting the closest available option and getting defaults that don't fit their context. The developer who builds a legal research tool and selects "B2B productivity" because there's no legal research category will get defaults that block case law about violent crimes. That's not a moderation failure. That's a product failure. Someone needs to own that taxonomy the way a PM owns a roadmap: with a review cadence, a threshold for adding new categories, and accountability for what happens when it's wrong.</p>
+
+    <h2>Success Metrics</h2>
+
+    <p>Every content moderation system is optimizing two failure modes simultaneously. False negatives, harmful content that got through, generate headlines, regulatory attention, and trust damage. False positives, legitimate requests that got blocked, generate developer churn, user frustration, and a quieter, harder-to-measure category of harm. A doctor who can't get a clear medication explanation. A researcher who can't study extremism. A fiction writer whose work keeps getting flagged.</p>
+
+    <p>Both are real failures. The system that optimizes only for false negatives will over-restrict until it's unusable. The system that optimizes only for false positives will eventually let something catastrophic through. The metrics have to hold both.</p>
+
+    <h3>Primary metrics</h3>
+
+    <div class="metric-group">
+      <div class="metric-item primary">
+        <div class="metric-name">False positive rate by use-case category</div>
+        <p>Not one aggregate number — that hides the signal. A false positive in a children's education app and a false positive in a security research tool represent completely different calibration failures. Segment it or you're not measuring the right thing.</p>
+      </div>
+      <div class="metric-item primary">
+        <div class="metric-name">Hard red line escape rate</div>
+        <p>Tracked separately from everything else. The rate at which requests producing content that violates absolute prohibitions successfully bypass moderation. Target is as close to zero as measurable. This number does not get averaged with the general false negative rate. The stakes are categorically different, and treating them as one metric obscures both.</p>
+      </div>
+    </div>
+
+    <h3>Secondary metrics</h3>
+
+    <div class="metric-group">
+      <div class="metric-item">
+        <div class="metric-name">Time to resolution for developer escalations</div>
+        <p>When a legitimate use case gets blocked, how long does it take to review and restore? This is an operational health metric. A startup whose product is incorrectly blocked for 72 hours while waiting for review is a churn event.</p>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Jailbreak detection rate on known attack patterns</div>
+        <p>There's a documented taxonomy of jailbreak techniques: role-play frames, step fragmentation, fictional wrappers, prompt resets. Your inference layer should be catching these. It won't catch novel attacks, but if it's not catching documented ones, that's a more urgent problem.</p>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">Policy legibility score</div>
+        <p>Measured via support ticket analysis: what percentage of developer contacts after a block contain the phrase "why was I blocked" or equivalent? A high rate means developers don't understand the moderation decision. Legibility is what allows developers to self-correct rather than escalate.</p>
+      </div>
+    </div>
+
+    <h3>Guardrail metric</h3>
+
+    <div class="metric-group">
+      <div class="metric-item guardrail">
+        <div class="metric-name">Developer activation rate post-configuration</div>
+        <p>Are developers successfully deploying after completing the configuration flow, or are they abandoning it partway through? A drop here means the configuration product is too complex, too restrictive in its defaults, or both. This is the metric that keeps you honest about whether you've actually solved the usability problem or just documented it.</p>
+      </div>
+    </div>
+
+    <h2>What Good Looks Like at 30 Days</h2>
+
+    <p>At 30 days you're not declaring victory. You're answering four questions: Are the hard red lines holding? Is your escalation queue at a manageable volume with resolution times within the SLA you committed to? Do you have baseline false positive rates by category, even imperfect ones, so you have something to compare against at 60 days? And is there a documented process for updating the use-case taxonomy when operators discover it doesn't fit their context?</p>
+
+    <div class="insight-box">
+      <div class="insight-label">The honest test</div>
+      <p>If you can't answer yes to all four, you have a gap. Name it now, before it compounds. At 30 days you're establishing the baselines that will tell you whether you're winning or losing at 90.</p>
+    </div>
+
+    <h2>What Breaks at Scale</h2>
+
+    <div class="scale-item">
+      <div class="scale-title">Configuration complexity outpaces your taxonomy</div>
+      <p>At launch you've designed for the use cases you anticipated. At 10x operators you have categories you didn't design for, combinations of settings nobody tested, and edge cases that produce moderation behavior that's technically within policy but completely wrong for the context. The taxonomy debt becomes a support burden, then a trust problem.</p>
+    </div>
+
+    <div class="scale-item">
+      <div class="scale-title">The adversarial surface grows faster than your detection cycle</div>
+      <p>Bad actors share jailbreaks. A new technique can go from discovered to widely distributed in 48 hours. Your update cycle for inference filters is probably measured in days or weeks. That gap requires a rapid-response process for moderation updates that most teams don't build until after the first incident that demands it.</p>
+    </div>
+
+    <div class="scale-item">
+      <div class="scale-title">False positives hit regulated verticals and become trust incidents</div>
+      <p>One documented case of a healthcare tool getting incorrectly blocked during a clinical workflow doesn't just affect that customer. It affects every healthcare company evaluating whether to build on your platform. Regulated verticals need a differentiated escalation path before you need it, not after.</p>
+    </div>
+
+    <div class="scale-item">
+      <div class="scale-title">The invisible end user problem compounds</div>
+      <p>The people most affected by your moderation decisions, the end users of developer-built products, are not your customers. Your feedback loop runs: end user is harmed, they complain to the operator, operator files a ticket, your team investigates. Three hops of signal degradation, mediated by whether the operator even understood what happened. At scale it means your moderation system is making decisions that affect millions of people whose behavior you cannot observe, whose harms you cannot directly measure, and whose feedback you receive only if it survives the journey through an operator. Every metric you choose and every escalation path you design should account for the fact that your most important signal is also your most indirect one.</p>
+    </div>
+
+    <h2>The Frame That Actually Matters</h2>
+
+    <p>Most writing about AI content moderation treats it as a policy problem with product implications. The argument of this essay is the reverse: it's a product problem with policy implications. The users are developers. The artifact is a configuration system. The failure modes are measurable. The things that break at scale are specific and anticipatable.</p>
+
+    <p>That framing doesn't make the hard questions easier. Dual-use content is genuinely hard. Jurisdictional variation is genuinely hard. The invisible end user is genuinely hard. But none of those problems get solved by writing better policies alone. They get worked on, iteratively, by teams who treat moderation as a product discipline, with users, requirements, metrics, and a roadmap.</p>
+
+    <p>That's what responsible at scale actually looks like.</p>
+
+  </div>
+
+  <div class="article-author">
+    <div class="author-avatar">SP</div>
+    <div>
+      <div class="author-name">Sambhavana Priyadarsini</div>
+      <div class="author-bio">MBA candidate at UVA Darden. Former TPM at Microsoft. Writing about AI products, product strategy, and the gap between what gets built and what users actually need. <a href="index.html">Portfolio →</a></div>
+    </div>
+  </div>
+
+  <div class="back-link-wrap">
+    <a class="back-link" href="index.html">← Back to portfolio</a>
+  </div>
+
+</div>
+
+</body>
+</html>
