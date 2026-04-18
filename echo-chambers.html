@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Echo chambers in engagement-optimized recommendation systems — Sambhavana Priyadarsini</title>
+  <meta name="description" content="Research in progress. An independent study on whether engagement optimization structurally produces echo chambers, and whether targeted interventions can reduce concentration without material engagement cost." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sage:          #4a7c6f;
+      --sage-light:    #e8f0ee;
+      --sage-dark:     #2e5248;
+      --ink:           #1a1d1c;
+      --ink-mid:       #4a504e;
+      --ink-light:     #8a918f;
+      --warm:          #f8f6f1;
+      --warm-dark:     #f0ede5;
+      --white:         #ffffff;
+      --amber:         #b87333;
+      --amber-light:   #fdf0e3;
+      --border:        rgba(74,124,111,0.13);
+      --border-strong: rgba(74,124,111,0.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm);
+      color: var(--ink);
+      line-height: 1.7;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    nav {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 36px 28px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-name {
+      font-family: 'Lora', serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      text-decoration: none;
+    }
+    .nav-back {
+      font-size: 12px;
+      color: var(--ink-light);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--sage); }
+
+    .article-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 64px 28px 120px;
+    }
+
+    /* HEADER */
+    .article-header {
+      margin-bottom: 48px;
+      animation: fadeUp 0.6s ease both;
+    }
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .meta-type {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sage);
+    }
+    .meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-light); flex-shrink: 0; }
+    .meta-status {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: var(--amber-light);
+      color: var(--amber);
+      letter-spacing: 0.03em;
+    }
+
+    .article-header h1 {
+      font-family: 'Lora', serif;
+      font-size: 34px;
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin-bottom: 20px;
+    }
+    .article-dek {
+      font-size: 17px;
+      color: var(--ink-mid);
+      line-height: 1.75;
+      font-weight: 300;
+      font-family: 'Lora', serif;
+      font-style: italic;
+      border-left: 3px solid var(--sage);
+      padding-left: 20px;
+    }
+
+    /* NOTICE */
+    .research-notice {
+      background: var(--warm-dark);
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 40px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .notice-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .notice-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--ink-light);
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .research-notice p {
+      font-size: 13px !important;
+      color: var(--ink-light) !important;
+      font-style: italic;
+      font-family: 'Lora', serif;
+      line-height: 1.6 !important;
+      margin-bottom: 0 !important;
+    }
+
+    .article-divider { height: 1px; background: var(--border); margin: 40px 0; }
+
+    /* BODY */
+    .article-body { animation: fadeUp 0.6s 0.1s ease both; }
+
+    .article-body p {
+      font-size: 16px;
+      color: var(--ink-mid);
+      line-height: 1.85;
+      margin-bottom: 24px;
+      font-weight: 300;
+    }
+    .article-body p b { font-weight: 500; color: var(--ink); }
+
+    .article-body h2 {
+      font-family: 'Lora', serif;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--ink);
+      letter-spacing: -0.015em;
+      line-height: 1.3;
+      margin: 48px 0 16px;
+    }
+
+    /* RESEARCH CARDS */
+    .research-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 28px 0 36px;
+    }
+    .research-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 18px;
+    }
+    .rc-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 8px;
+    }
+    .research-card p {
+      font-size: 13px !important;
+      color: var(--ink-mid) !important;
+      line-height: 1.65 !important;
+      margin-bottom: 0 !important;
+    }
+    .research-card p b { color: var(--ink) !important; }
+
+    /* FINDING BOX */
+    .finding-box {
+      background: var(--sage-light);
+      border-radius: 10px;
+      padding: 24px 26px;
+      margin: 28px 0;
+    }
+    .finding-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sage-dark);
+      margin-bottom: 10px;
+    }
+    .finding-box p {
+      font-size: 15px !important;
+      color: var(--sage-dark) !important;
+      line-height: 1.7 !important;
+      margin-bottom: 0 !important;
+      font-weight: 400 !important;
+    }
+    .finding-box p b { color: var(--sage-dark) !important; font-weight: 500 !important; }
+
+    /* PULL QUOTE */
+    .pull-quote {
+      background: var(--warm-dark);
+      border-left: 3px solid var(--sage);
+      padding: 22px 26px;
+      border-radius: 0 6px 6px 0;
+      margin: 32px 0;
+    }
+    .pull-quote p {
+      font-family: 'Lora', serif;
+      font-size: 17px !important;
+      font-style: italic;
+      color: var(--ink-mid) !important;
+      line-height: 1.75 !important;
+      margin-bottom: 0 !important;
+    }
+    .pull-quote p b { font-style: normal; font-weight: 500; color: var(--ink) !important; }
+
+    /* INTERVENTIONS */
+    .intervention-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px 0 28px;
+    }
+    .intervention-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 14px 18px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .intervention-num {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--sage);
+      background: var(--sage-light);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .intervention-body {}
+    .intervention-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 3px;
+    }
+    .intervention-desc {
+      font-size: 13px;
+      color: var(--ink-mid);
+      line-height: 1.6;
+    }
+
+    /* METHODS */
+    .methods-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .method-tag {
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: var(--warm-dark);
+      color: var(--ink-mid);
+      border: 1px solid var(--border);
+    }
+
+    .article-author {
+      margin-top: 72px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .author-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--sage-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Lora', serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--sage-dark);
+      flex-shrink: 0;
+    }
+    .author-name { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+    .author-bio { font-size: 13px; color: var(--ink-mid); line-height: 1.5; }
+    .author-bio a { color: var(--sage); text-decoration: none; }
+    .author-bio a:hover { text-decoration: underline; }
+
+    .back-link-wrap { margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .back-link {
+      font-size: 13px;
+      color: var(--ink-light);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--sage); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .article-header h1 { font-size: 24px; }
+      .article-body p { font-size: 15px; }
+      .research-grid { grid-template-columns: 1fr; }
+      nav { padding: 24px 20px 0; }
+      .article-wrap { padding: 44px 20px 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-name" href="index.html">Sambhavana Priyadarsini</a>
+  <a class="nav-back" href="index.html">← Back to portfolio</a>
+</nav>
+
+<div class="article-wrap">
+
+  <header class="article-header">
+    <div class="article-meta">
+      <span class="meta-type">Research</span>
+      <div class="meta-dot"></div>
+      <span class="meta-status">In progress</span>
+    </div>
+    <h1>Echo chambers in engagement-optimized recommendation systems</h1>
+    <p class="article-dek">Does optimizing a recommendation system purely for engagement structurally produce echo chambers — and can targeted interventions reduce concentration without material engagement cost?</p>
+  </header>
+
+  <div class="research-notice">
+    <div class="notice-icon">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    </div>
+    <p>This research is being conducted as part of my MBA program at UVA Darden. Findings and conclusions will be published upon completion.</p>
+  </div>
+
+  <div class="article-divider"></div>
+
+  <div class="article-body">
+
+    <h2>The Question</h2>
+
+    <p>The study isn't asking whether echo chambers exist or whether they're harmful — those are treated as established. The actual question is structural and causal: <b>does optimizing a recommendation system exclusively for predicted short-term engagement structurally produce echo chambers as an emergent outcome?</b> And if so, which algorithmic interventions reduce content concentration most efficiently, measured as diversity gain per unit of engagement loss?</p>
+
+    <p>The intervention efficiency question is the sharpest live question: whether the relative ranking of three interventions is stable across parameter variations, or whether it collapses depending on system configuration. That stability question determines whether the findings have prescriptive value or only diagnostic value.</p>
+
+    <h2>Research Design</h2>
+
+    <p>The study is entirely simulation-based — a controlled environment that isolates the variable of interest without the confounding forces present in live platforms.</p>
+
+    <div class="research-grid">
+      <div class="research-card">
+        <div class="rc-label">Environment</div>
+        <p><b>1,000 synthetic users</b> and <b>10,000 content items</b> represented in a shared 32-dimensional embedding space across 10 topics.</p>
+      </div>
+      <div class="research-card">
+        <div class="rc-label">Scale</div>
+        <p><b>600,000 logged interactions</b> across 30 simulated sessions per user, with engagement modeled probabilistically as a function of preference-content alignment.</p>
+      </div>
+      <div class="research-card">
+        <div class="rc-label">Behavioral correction</div>
+        <p>A corrected baseline introduces natural engagement variance — replicating how real users don't engage with the same content repeatedly even when it closely matches their preferences.</p>
+      </div>
+      <div class="research-card">
+        <div class="rc-label">Design intent</div>
+        <p>A worst-case upper-bound design with ground-truth embeddings and no competing platform forces. Results describe <b>maximum echo chamber formation speed</b> under pure engagement optimization.</p>
+      </div>
+    </div>
+
+    <h2>What the Baseline Confirmed</h2>
+
+    <div class="finding-box">
+      <div class="finding-label">Q3 Baseline Result</div>
+      <p>Pure engagement optimization collapses topical diversity to <b>near-total concentration (99.6%)</b> across 30 simulated sessions — while engagement remains above 92%. Echo chamber formation is an <b>optimization outcome, not a system failure.</b></p>
+    </div>
+
+    <p>The concentration-without-engagement-loss pattern is the key finding from the baseline phase. Engagement doesn't degrade as concentration increases — it mildly improves. This confirms the primary hypothesis and sets up the intervention phase: if you can reduce concentration without touching engagement, you've found a product-level solution that doesn't require a values trade-off.</p>
+
+    <h2>Current Work: Intervention Testing</h2>
+
+    <p>Q4 is testing three algorithmic interventions against the corrected baseline, with the goal of mapping the Pareto frontier between engagement loss and diversity gain.</p>
+
+    <div class="intervention-list">
+      <div class="intervention-item">
+        <div class="intervention-num">1</div>
+        <div class="intervention-body">
+          <div class="intervention-name">Diversity-aware re-ranking</div>
+          <div class="intervention-desc">Re-orders recommendation outputs to increase topical spread while preserving relevance signals.</div>
+        </div>
+      </div>
+      <div class="intervention-item">
+        <div class="intervention-num">2</div>
+        <div class="intervention-body">
+          <div class="intervention-name">Frequency caps</div>
+          <div class="intervention-desc">Limits how often content from the same topic cluster can appear in a session, forcing exposure to adjacent topics.</div>
+        </div>
+      </div>
+      <div class="intervention-item">
+        <div class="intervention-num">3</div>
+        <div class="intervention-body">
+          <div class="intervention-name">Mild exploration</div>
+          <div class="intervention-desc">Introduces a small probability of recommending content outside the user's current preference cluster — the hypothesis is that this delivers outsized diversity gains relative to its engagement cost.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      <p>The central open question: is the relative efficiency ranking of these three interventions <b>stable across parameter configurations?</b> If it is, the findings yield prescriptive guidance. If it collapses, the findings are primarily diagnostic — useful for understanding the problem, but not for recommending a specific fix.</p>
+    </div>
+
+    <h2>The Practical Implication</h2>
+
+    <p>If mild exploration delivers outsized diversity gains at minimal engagement cost, that's a product decision any PM at a recommendation-driven platform can make without needing executive sign-off on a values trade-off. The intervention becomes an optimization, not a compromise.</p>
+
+    <p>That's the framing that makes this a product problem rather than a policy problem. The question isn't whether platforms should reduce echo chambers. It's whether they can do it without giving anything up — and if so, what the cheapest path looks like.</p>
+
+    <h2>Methods</h2>
+    <div class="methods-row">
+      <span class="method-tag">Simulation-based offline experiment</span>
+      <span class="method-tag">1,000 users · 10,000 items · 600,000 interactions</span>
+      <span class="method-tag">Embedding-based recommender architecture</span>
+      <span class="method-tag">Causal intervention design</span>
+      <span class="method-tag">32-dimensional latent space</span>
+    </div>
+
+  </div>
+
+  <div class="article-author">
+    <div class="author-avatar">SP</div>
+    <div>
+      <div class="author-name">Sambhavana Priyadarsini</div>
+      <div class="author-bio">MBA candidate at UVA Darden. Former TPM at Microsoft. Writing about AI products, product strategy, and the gap between what gets built and what users actually need. <a href="index.html">Portfolio →</a></div>
+    </div>
+  </div>
+
+  <div class="back-link-wrap">
+    <a class="back-link" href="index.html">← Back to portfolio</a>
+  </div>
+
+</div>
+
+</body>
+</html>
