@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VuGru — Photo Review and Approval Platform — Sambhavana Priyadarsini</title>
+  <meta name="description" content="VuGru centralizes photo review, feedback, and approval into a single workflow. Led product definition and engineering team across two Darden courses." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sage:          #4a7c6f;
+      --sage-light:    #e8f0ee;
+      --sage-dark:     #2e5248;
+      --ink:           #1a1d1c;
+      --ink-mid:       #4a504e;
+      --ink-light:     #8a918f;
+      --warm:          #f8f6f1;
+      --warm-dark:     #f0ede5;
+      --white:         #ffffff;
+      --amber:         #b87333;
+      --amber-light:   #fdf0e3;
+      --border:        rgba(74,124,111,0.13);
+      --border-strong: rgba(74,124,111,0.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm);
+      color: var(--ink);
+      line-height: 1.7;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    nav {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 36px 28px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-name {
+      font-family: 'Lora', serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      text-decoration: none;
+    }
+    .nav-back {
+      font-size: 12px;
+      color: var(--ink-light);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--sage); }
+
+    .article-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 64px 28px 120px;
+    }
+
+    /* HEADER */
+    .article-header {
+      margin-bottom: 48px;
+      animation: fadeUp 0.6s ease both;
+    }
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .meta-type {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+    }
+    .meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-light); flex-shrink: 0; }
+    .meta-date { font-size: 12px; color: var(--ink-light); }
+    .meta-tag {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: var(--warm-dark);
+      color: var(--ink-mid);
+      letter-spacing: 0.03em;
+    }
+
+    .article-header h1 {
+      font-family: 'Lora', serif;
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .article-header .subhead {
+      font-size: 14px;
+      color: var(--ink-light);
+      font-style: italic;
+      font-family: 'Lora', serif;
+      margin-bottom: 24px;
+    }
+    .article-dek {
+      font-size: 17px;
+      color: var(--ink-mid);
+      line-height: 1.75;
+      font-weight: 300;
+      font-family: 'Lora', serif;
+      font-style: italic;
+      border-left: 3px solid var(--sage);
+      padding-left: 20px;
+    }
+
+    .article-divider { height: 1px; background: var(--border); margin: 40px 0; }
+
+    /* ROLE CARDS */
+    .role-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 52px;
+    }
+    .role-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 22px 20px;
+    }
+    .role-card.highlight { border-color: var(--border-strong); }
+    .role-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 6px;
+    }
+    .role-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .role-card p {
+      font-size: 13px;
+      color: var(--ink-mid);
+      line-height: 1.6;
+    }
+
+    /* BODY */
+    .article-body { animation: fadeUp 0.6s 0.1s ease both; }
+
+    .article-body p {
+      font-size: 16px;
+      color: var(--ink-mid);
+      line-height: 1.85;
+      margin-bottom: 24px;
+      font-weight: 300;
+    }
+    .article-body p b { font-weight: 500; color: var(--ink); }
+
+    .article-body h2 {
+      font-family: 'Lora', serif;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--ink);
+      letter-spacing: -0.015em;
+      line-height: 1.3;
+      margin: 52px 0 18px;
+    }
+
+    /* PULL QUOTE */
+    .pull-quote {
+      background: var(--warm-dark);
+      border-left: 3px solid var(--sage);
+      padding: 22px 26px;
+      border-radius: 0 6px 6px 0;
+      margin: 32px 0;
+    }
+    .pull-quote p {
+      font-family: 'Lora', serif;
+      font-size: 17px !important;
+      font-style: italic;
+      color: var(--ink-mid) !important;
+      line-height: 1.75 !important;
+      margin-bottom: 0 !important;
+    }
+    .pull-quote p b { font-style: normal; font-weight: 500; color: var(--ink) !important; }
+
+    /* PERSONAS */
+    .persona-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 24px 0 32px;
+    }
+    .persona-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .persona-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .persona-avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--sage-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--sage-dark);
+      flex-shrink: 0;
+    }
+    .persona-name { font-size: 13px; font-weight: 500; color: var(--ink); }
+    .persona-role { font-size: 11px; color: var(--ink-light); }
+    .persona-jtbd {
+      font-size: 13px;
+      color: var(--ink-mid);
+      font-style: italic;
+      font-family: 'Lora', serif;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    .persona-vp {
+      font-size: 12px;
+      color: var(--sage-dark);
+      background: var(--sage-light);
+      padding: 6px 10px;
+      border-radius: 6px;
+      line-height: 1.5;
+    }
+
+    /* USER STORIES */
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 20px 0 32px;
+    }
+    .story-item {
+      background: var(--warm-dark);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 13px;
+      color: var(--ink-mid);
+      line-height: 1.55;
+    }
+    .story-id {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--sage);
+      margin-bottom: 4px;
+      letter-spacing: 0.03em;
+    }
+
+    /* BUILD LAYERS */
+    .build-layers {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 20px 0 32px;
+    }
+    .build-layer {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 16px;
+      align-items: start;
+      padding: 16px 20px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .layer-name {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink);
+      letter-spacing: 0.03em;
+      padding-top: 1px;
+    }
+    .layer-desc {
+      font-size: 13px;
+      color: var(--ink-mid);
+      line-height: 1.6;
+    }
+
+    /* INSIGHT BOX */
+    .insight-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px 28px;
+      margin: 28px 0;
+    }
+    .insight-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 10px;
+    }
+    .insight-box p { font-size: 15px !important; color: var(--ink-mid) !important; margin-bottom: 0 !important; line-height: 1.7 !important; }
+    .insight-box p b { color: var(--ink) !important; }
+
+    /* TECH STACK */
+    .stack-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 16px 0;
+    }
+    .stack-tag {
+      font-size: 12px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      background: var(--warm-dark);
+      color: var(--ink-mid);
+      border: 1px solid var(--border);
+      letter-spacing: 0.02em;
+    }
+
+    /* LEARNINGS */
+    .learning-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .learning-item {
+      display: grid;
+      grid-template-columns: 20px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+    .learning-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--sage);
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+    .learning-item p {
+      font-size: 15px !important;
+      margin-bottom: 0 !important;
+    }
+
+    .article-author {
+      margin-top: 72px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .author-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--sage-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Lora', serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--sage-dark);
+      flex-shrink: 0;
+    }
+    .author-name { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+    .author-bio { font-size: 13px; color: var(--ink-mid); line-height: 1.5; }
+    .author-bio a { color: var(--sage); text-decoration: none; }
+    .author-bio a:hover { text-decoration: underline; }
+
+    .back-link-wrap { margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .back-link {
+      font-size: 13px;
+      color: var(--ink-light);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--sage); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .article-header h1 { font-size: 26px; }
+      .role-grid { grid-template-columns: 1fr; }
+      .persona-grid { grid-template-columns: 1fr; }
+      .story-grid { grid-template-columns: 1fr; }
+      .build-layer { grid-template-columns: 1fr; gap: 6px; }
+      nav { padding: 24px 20px 0; }
+      .article-wrap { padding: 44px 20px 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-name" href="index.html">Sambhavana Priyadarsini</a>
+  <a class="nav-back" href="index.html">← Back to portfolio</a>
+</nav>
+
+<div class="article-wrap">
+
+  <header class="article-header">
+    <div class="article-meta">
+      <span class="meta-type">Side Project</span>
+      <div class="meta-dot"></div>
+      <span class="meta-date">UVA Darden — 2025</span>
+      <div class="meta-dot"></div>
+      <span class="meta-tag">Deployed</span>
+    </div>
+    <h1>VuGru</h1>
+    <p class="subhead">Photo review and approval platform</p>
+    <p class="article-dek">Photographers lose edits and delay projects because client feedback arrives fragmented across emails, texts, and messages. VuGru centralizes photo review, feedback, and approval into a single workflow so projects close cleanly.</p>
+  </header>
+
+  <div class="role-grid">
+    <div class="role-card highlight">
+      <div class="role-label">Course 1 — Product Design</div>
+      <div class="role-title">Product Manager</div>
+      <p>Defined design intent, conducted user research, developed personas and Jobs to be Done, and translated findings into a prioritized epic structure with outcome-anchored user stories.</p>
+    </div>
+    <div class="role-card highlight">
+      <div class="role-label">Course 2 — Coding with GPT</div>
+      <div class="role-title">Engineering Team Lead</div>
+      <p>Led the team through full implementation — decomposing user stories into view, controller, and model logic, running two rounds of usability testing, and iterating based on observed behavior.</p>
+    </div>
+  </div>
+
+  <div class="article-divider"></div>
+
+  <div class="article-body">
+
+    <h2>The Problem</h2>
+
+    <p>Photographers working with clients face a consistent breakdown: feedback arrives across three or four channels simultaneously, revisions get missed, and projects drag on because neither side has a clear view of what's been addressed and what hasn't. The root cause isn't communication volume — it's the absence of a shared source of truth that ties each piece of feedback to a specific photo and tracks its status through to resolution.</p>
+
+    <div class="pull-quote">
+      <p>The guiding design principle throughout both product and code: <b>clarity over complexity, intuition over instruction.</b></p>
+    </div>
+
+    <h2>Personas and Jobs to be Done</h2>
+
+    <div class="persona-grid">
+      <div class="persona-card">
+        <div class="persona-header">
+          <div class="persona-avatar">P</div>
+          <div>
+            <div class="persona-name">Paahil</div>
+            <div class="persona-role">The Photographer</div>
+          </div>
+        </div>
+        <p class="persona-jtbd">"When I send draft albums, I need feedback captured in one place so that I don't lose edits across multiple channels and can finish revisions on time."</p>
+        <div class="persona-vp">Save time, reduce mistakes, move projects to completion smoothly.</div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-header">
+          <div class="persona-avatar">C</div>
+          <div>
+            <div class="persona-name">The Client</div>
+            <div class="persona-role">Album Reviewer</div>
+          </div>
+        </div>
+        <p class="persona-jtbd">"When I review my photos, I want to give clear feedback on the right image and know revisions are tracked, so I feel confident approving the final album."</p>
+        <div class="persona-vp">Give feedback simply, track progress transparently, close projects without friction.</div>
+      </div>
+    </div>
+
+    <p>Three design implications followed directly from the personas: feedback must be photo-specific, interactions must be discoverable without instructions, and status visibility must reduce uncertainty for both roles. Every subsequent product and engineering decision was evaluated against these three constraints.</p>
+
+    <h2>What Was Built</h2>
+
+    <p>The final product implements fourteen user stories across the core workflow: album upload, client notification, photo review, photo-specific commenting, version tracking across revision cycles, role-based access for photographers and clients, and a project status system that surfaces where each engagement stands.</p>
+
+    <div class="story-grid">
+      <div class="story-item">
+        <div class="story-id">Upload</div>
+        Photographer uploads a draft album; client receives a notification without searching through emails.
+      </div>
+      <div class="story-item">
+        <div class="story-id">Review</div>
+        Client opens the album, views photos in an intuitive scrollable grid, enlarges on click.
+      </div>
+      <div class="story-item">
+        <div class="story-id">Feedback</div>
+        Client leaves comments tied directly to specific photos. No ambiguity about which image each comment applies to.
+      </div>
+      <div class="story-item">
+        <div class="story-id">Revisions</div>
+        Photographer uploads revised photos labeled as new versions. Client sees what changed.
+      </div>
+      <div class="story-item">
+        <div class="story-id">Curation</div>
+        Client marks photos for the final album without needing to leave a comment for each selection.
+      </div>
+      <div class="story-item">
+        <div class="story-id">Approval</div>
+        Client approves the final album. Project closes. Payment moves forward.
+      </div>
+    </div>
+
+    <h2>How It Was Built</h2>
+
+    <div class="build-layers">
+      <div class="build-layer">
+        <div class="layer-name">View layer</div>
+        <div class="layer-desc">Grid-based photo gallery, enlarged photo modal, inline comment sections per photo, clear button hierarchy for approval actions.</div>
+      </div>
+      <div class="build-layer">
+        <div class="layer-name">Controller logic</div>
+        <div class="layer-desc">Photo selection and enlargement, comment creation tied to photo IDs, like and Add-to-Album state toggling, status transitions across the workflow.</div>
+      </div>
+      <div class="build-layer">
+        <div class="layer-name">State management</div>
+        <div class="layer-desc">Photo objects with metadata (id, version, status), comment objects scoped to photo IDs, in-memory state that reflects workflow progression.</div>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <div class="insight-label">Build decision framework</div>
+      <p><b>If a component shaped user behavior, we built it from scratch.</b> If it supported the workflow without defining it, we considered external solutions. Authentication was the only third-party integration — a non-differentiating capability that didn't touch the core feedback workflow. Every view, controller, and model for photo display, commenting, and approval was written ourselves to maintain tight alignment between design intent and implementation behavior.</p>
+    </div>
+
+    <h2>Testing and Iteration</h2>
+
+    <p>Two rounds of usability testing shaped the final implementation. The first round surfaced layout assumptions that didn't hold under real use — comments were relocated, button hierarchy was simplified, gallery behavior was adjusted. The second tested the end-to-end flow from upload through approval and validated the revised interactions.</p>
+
+    <p>End-to-end tests were generated using Playwright via Cursor. Early test generation produced 66 tests, most of which lacked the contextual preconditions that real user flows require — tests tried to add comments when no albums existed, for example. Refining the scenarios to include proper "given/when/then" context produced a test suite that actually reflected user behavior and passed cleanly.</p>
+
+    <p>The debugging philosophy that emerged: treat confusion as a design bug, not just a code bug. When something wasn't working, the first question was whether the UI state matched the user's mental model — not just whether the code was syntactically correct.</p>
+
+    <h2>Stack and Deployment</h2>
+
+    <div class="stack-row">
+      <span class="stack-tag">JavaScript</span>
+      <span class="stack-tag">CSS</span>
+      <span class="stack-tag">HTML</span>
+      <span class="stack-tag">Deployed on Railway</span>
+      <span class="stack-tag">Playwright (E2E testing)</span>
+      <span class="stack-tag">Authentication API</span>
+    </div>
+
+    <p style="margin-top: 20px;">Deployed on Railway after evaluating AWS Amplify — Railway offered a more straightforward connection to the GitHub repo with no configuration overhead. The live product is available on request.</p>
+
+    <h2>What I Learned</h2>
+
+    <div class="learning-list">
+      <div class="learning-item">
+        <div class="learning-dot"></div>
+        <p><b>Design intent has to be specific enough to be testable.</b> "Intuitive" is not a behavioral definition of done. "A client can leave feedback without ambiguity about which image it applies to" is.</p>
+      </div>
+      <div class="learning-item">
+        <div class="learning-dot"></div>
+        <p><b>Building the core workflow from scratch was the right call.</b> It kept iteration fast — small changes to layout or interaction could be implemented and tested without working around external frameworks.</p>
+      </div>
+      <div class="learning-item">
+        <div class="learning-dot"></div>
+        <p><b>Test quality depends on context, not count.</b> 66 context-free tests were less useful than 20 tests grounded in real user flows. The discipline of writing "given/when/then" properly applies to testing the same way it applies to user stories.</p>
+      </div>
+      <div class="learning-item">
+        <div class="learning-dot"></div>
+        <p><b>Shipping changes what you know.</b> The gap between a prototype that looks right and a deployed product that behaves right is where the real product thinking happens.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="article-author">
+    <div class="author-avatar">SP</div>
+    <div>
+      <div class="author-name">Sambhavana Priyadarsini</div>
+      <div class="author-bio">MBA candidate at UVA Darden. Former TPM at Microsoft. Writing about AI products, product strategy, and the gap between what gets built and what users actually need. <a href="index.html">Portfolio →</a></div>
+    </div>
+  </div>
+
+  <div class="back-link-wrap">
+    <a class="back-link" href="index.html">← Back to portfolio</a>
+  </div>
+
+</div>
+
+</body>
+</html>
