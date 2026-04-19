@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PRD: AI-Powered Weekly Status Summaries for Jira — Sambhavana Priyadarsini</title>
+  <title>PRD: AI-Powered Weekly Status Summaries for Jira, Sambhavana Priyadarsini</title>
   <meta name="description" content="A product requirements document for an AI feature that auto-drafts weekly project summaries inside Jira. By Sambhavana Priyadarsini." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -475,8 +475,8 @@
       <span class="meta-status">Draft</span>
     </div>
     <h1>AI-Powered Weekly Status Summaries <em>for Jira</em></h1>
-    <p class="subhead">Feature: AI-Powered Weekly Status Summaries — Author: Sambhavana Priyadarsini</p>
-    <p class="article-dek">TPMs and engineering managers spend 30–90 minutes every week aggregating data they don't generate. The raw material is already in Jira. The gap is signal extraction — and that's a solvable product problem.</p>
+    <p class="subhead">Feature: AI-Powered Weekly Status Summaries, Author: Sambhavana Priyadarsini</p>
+    <p class="article-dek">TPMs and engineering managers spend 30–90 minutes every week aggregating data they don't generate. The raw material is already in Jira. The gap is signal extraction, and that's a solvable product problem.</p>
   </header>
 
   <div class="toc">
@@ -500,12 +500,12 @@
   <div class="article-body">
 
     <h2 id="problem">1. Problem Statement</h2>
-    <p>TPMs and engineering managers spend 30–90 minutes before every weekly status meeting aggregating project data they don't generate — they only consume it. The raw material exists in Jira: ticket updates, sprint progress, blocker flags, assignee changes, status transitions. But <b>Jira is structured for querying, not for reading.</b> JQL retrieves the data; it was never designed to interpret it.</p>
+    <p>TPMs and engineering managers spend 30–90 minutes before every weekly status meeting aggregating project data they don't generate, they only consume it. The raw material exists in Jira: ticket updates, sprint progress, blocker flags, assignee changes, status transitions. But <b>Jira is structured for querying, not for reading.</b> JQL retrieves the data; it was never designed to interpret it.</p>
     <p>The gap between "data pulled from Jira" and "summary a stakeholder can act on" is still filled by a human, manually, every week. The pain is not data access. It is signal extraction. What counts as meaningful progress varies by team, project type, and sprint phase. A ticket moving from In Progress to In Review means something different on day two of a sprint than it does on day nine of ten. Without context-aware interpretation, raw Jira data produces either an exhaustive dump nobody reads or a shallow summary that misses what actually matters.</p>
 
     <h2 id="goals">2. Goals and Non-Goals</h2>
     <p><b>Goals:</b> Enable TPMs and engineering managers to generate an accurate, signal-weighted weekly summary of sprint activity across epics, assignees, blockers, and status changes. Reduce time spent on weekly status aggregation from 30–90 minutes to under five minutes. Produce summaries grounded in configurable relevance rules, not undifferentiated data passed directly to an LLM.</p>
-    <p><b>Non-Goals:</b> Single-ticket summarization and incident-related summary generation — this already exists natively in Jira; replicating it is not the opportunity. Formatted, stakeholder-ready report output in v1 — accurate signal consolidation ships first, prose polish is a v2 problem. Automated scheduling or delivery. Multi-project aggregation across separate Jira instances. Natural language configuration of the relevance layer.</p>
+    <p><b>Non-Goals:</b> Single-ticket summarization and incident-related summary generation, this already exists natively in Jira; replicating it is not the opportunity. Formatted, stakeholder-ready report output in v1, accurate signal consolidation ships first, prose polish is a v2 problem. Automated scheduling or delivery. Multi-project aggregation across separate Jira instances. Natural language configuration of the relevance layer.</p>
 
     <h2 id="personas">3. User Personas</h2>
     <div class="persona-grid">
@@ -514,7 +514,7 @@
           <div class="persona-avatar">M</div>
           <div>
             <div class="persona-name">Maya</div>
-            <div class="persona-role">Technical Program Manager — Primary</div>
+            <div class="persona-role">Technical Program Manager, Primary</div>
           </div>
         </div>
         <p>Manages a 12-engineer program across three squads. Spends every Monday morning manually pulling updates, chasing missing context from three team leads, and translating ticket states into a coherent status email. Her definition of success: open the tool, generate a summary, make two edits, send it. Under ten minutes, start to finish.</p>
@@ -524,10 +524,10 @@
           <div class="persona-avatar">A</div>
           <div>
             <div class="persona-name">Arjun</div>
-            <div class="persona-role">Engineering Manager — Secondary</div>
+            <div class="persona-role">Engineering Manager, Secondary</div>
           </div>
         </div>
-        <p>Runs a two-week sprint cycle with eight engineers. Already knows roughly what happened this week — but producing a written summary for the VP update takes time he doesn't have. Wants a first draft that reflects what actually shipped, what's stuck, and what needs escalation. He'll edit it, but he doesn't want to write it from scratch.</p>
+        <p>Runs a two-week sprint cycle with eight engineers. Already knows roughly what happened this week, but producing a written summary for the VP update takes time he doesn't have. Wants a first draft that reflects what actually shipped, what's stuck, and what needs escalation. He'll edit it, but he doesn't want to write it from scratch.</p>
       </div>
     </div>
 
@@ -542,13 +542,13 @@
     <h2 id="requirements">5. Functional Requirements</h2>
 
     <div class="req-block">
-      <div class="req-priority p0">P0 — Must have for v1</div>
+      <div class="req-priority p0">P0, Must have for v1</div>
       <ul class="req-list">
         <li>Connect to a Jira project and pull the prior seven days of activity across specified epics, sprints, and assignees</li>
-        <li><b>Apply a relevance layer before passing data to the LLM</b> — configurable rules and thresholds that filter and weight signals (see below)</li>
+        <li><b>Apply a relevance layer before passing data to the LLM</b>, configurable rules and thresholds that filter and weight signals (see below)</li>
         <li>Pass the filtered, weighted signal set to the LLM with a structured prompt</li>
         <li>Return a structured summary covering: what shipped, what's in progress, what's blocked, what's at risk</li>
-        <li>Allow the user to configure scope — which epics and assignees are included — before generation</li>
+        <li>Allow the user to configure scope, which epics and assignees are included, before generation</li>
       </ul>
     </div>
 
@@ -559,16 +559,16 @@
     <p>The relevance layer includes: <b>threshold rules</b> (tickets stalled beyond N days flagged as blockers regardless of label; sprint completion below a threshold triggers a risk signal), <b>change-type weighting</b> (status transitions carry more weight than comment activity; unassigned tickets in active sprints rank higher than backlog movement), and <b>team-configured priorities</b> (which epics are load-bearing, which assignees are on the critical path, the team's working definition of "done").</p>
 
     <div class="req-block">
-      <div class="req-priority p1">P1 — Should have</div>
+      <div class="req-priority p1">P1, Should have</div>
       <ul class="req-list">
-        <li>Default relevance layer ruleset with manual override — so teams can generate a useful summary on first use without completing full configuration</li>
+        <li>Default relevance layer ruleset with manual override, so teams can generate a useful summary on first use without completing full configuration</li>
         <li>Ability to flag individual summary items as inaccurate or irrelevant, feeding back into relevance layer calibration</li>
         <li>Summary regeneration with adjusted scope or date range</li>
       </ul>
     </div>
 
     <div class="req-block">
-      <div class="req-priority p2">P2 — Nice to have</div>
+      <div class="req-priority p2">P2, Nice to have</div>
       <ul class="req-list">
         <li>Formatted, stakeholder-ready output with headers and sections styled for email or document use</li>
         <li>Suggested escalation actions based on flagged risks</li>
@@ -580,7 +580,7 @@
     <ul class="req-list" style="margin-top: 16px;">
       <li><b>Performance:</b> Summary generation must complete in under 30 seconds for a standard two-week sprint scope.</li>
       <li><b>Security:</b> Jira data must be processed strictly within the user's authorized permission scope. No summary should surface ticket content the requesting user could not access directly in Jira. Non-negotiable in regulated or enterprise environments.</li>
-      <li><b>Auditability:</b> Relevance layer rules must be inspectable — users should be able to see why a signal was included or excluded. This builds trust and enables calibration.</li>
+      <li><b>Auditability:</b> Relevance layer rules must be inspectable, users should be able to see why a signal was included or excluded. This builds trust and enables calibration.</li>
       <li><b>Scale:</b> The feature should support concurrent generation requests without degraded latency. Enterprise teams may have multiple users generating summaries on the same Monday morning.</li>
     </ul>
 
@@ -588,7 +588,7 @@
 
     <div class="metric-highlight">
       <div class="metric-name">North Star Metric</div>
-      <p><b>Weekly return rate over 30 days</b> — the percentage of users who generate a summary in week 2, 3, and 4 after first use. A user who returns weekly has integrated the feature into their actual workflow. A 40% week-4 return rate would signal the feature is replacing existing workflow rather than adding to it. Single-session usage is not a reliable signal: multiple generations in one session may indicate the user is fighting the product to get a usable output.</p>
+      <p><b>Weekly return rate over 30 days</b>, the percentage of users who generate a summary in week 2, 3, and 4 after first use. A user who returns weekly has integrated the feature into their actual workflow. A 40% week-4 return rate would signal the feature is replacing existing workflow rather than adding to it. Single-session usage is not a reliable signal: multiple generations in one session may indicate the user is fighting the product to get a usable output.</p>
     </div>
 
     <ul class="req-list" style="margin-top: 8px; margin-bottom: 20px;">
@@ -599,7 +599,7 @@
 
     <div class="metric-highlight" style="border-left-color: #a32d2d;">
       <div class="metric-name" style="color: #a32d2d;">Guardrail Metric</div>
-      <p>Permission scope violations must remain at <b>zero.</b> If any summary surfaces data outside a user's Jira access level, trust in the feature collapses and the feature should be disabled. Trust is the baseline — everything else is optimization.</p>
+      <p>Permission scope violations must remain at <b>zero.</b> If any summary surfaces data outside a user's Jira access level, trust in the feature collapses and the feature should be disabled. Trust is the baseline, everything else is optimization.</p>
     </div>
 
     <h2 id="risks">8. Dependencies and Risks</h2>
@@ -607,30 +607,30 @@
     <p><b>Dependencies:</b> Jira API access with appropriate OAuth scoping per user. LLM integration layer with structured prompt templates. Relevance layer configuration infrastructure (rules storage, per-team settings).</p>
 
     <div class="risk-block">
-      <div class="risk-title">Risk 1 — Poor Jira hygiene undermines summary quality</div>
+      <div class="risk-title">Risk 1, Poor Jira hygiene undermines summary quality</div>
       <p>Many enterprise Jira instances have stale tickets, inconsistent status discipline, and incomplete assignee data. A summary built on bad inputs will be wrong regardless of how good the relevance layer is, and users will blame the feature.</p>
       <div class="risk-mit">Mitigation</div>
-      <p>Surface a data quality signal before generation — flag if X% of in-scope tickets haven't been updated in more than N days and give users the option to exclude them. Don't silently generate a low-quality summary.</p>
+      <p>Surface a data quality signal before generation, flag if X% of in-scope tickets haven't been updated in more than N days and give users the option to exclude them. Don't silently generate a low-quality summary.</p>
     </div>
 
     <div class="risk-block">
-      <div class="risk-title">Risk 2 — Relevance layer defaults don't generalize</div>
+      <div class="risk-title">Risk 2, Relevance layer defaults don't generalize</div>
       <p>What counts as a blocker or a meaningful status change varies significantly across teams and project types. Defaults that work for a software sprint may misfire for a compliance-driven program.</p>
       <div class="risk-mit">Mitigation</div>
       <p>Ship with three default profiles (software sprint, compliance program, infrastructure migration) based on research with early users. Let teams switch profiles before full custom configuration.</p>
     </div>
 
     <div class="risk-block">
-      <div class="risk-title">Risk 3 — Users over-trust LLM output without reviewing it</div>
+      <div class="risk-title">Risk 3, Users over-trust LLM output without reviewing it</div>
       <p>Enterprise users under time pressure may send AI-generated summaries without reading them, creating reputational risk when the summary is wrong.</p>
       <div class="risk-mit">Mitigation</div>
-      <p>Add a lightweight confirmation step — "You're about to send this summary. It was generated from Jira data as of [timestamp]." Friction by design, not accident.</p>
+      <p>Add a lightweight confirmation step, "You're about to send this summary. It was generated from Jira data as of [timestamp]." Friction by design, not accident.</p>
     </div>
 
     <h2 id="questions">9. Open Questions</h2>
     <ul class="question-list">
-      <li>What is the right scope boundary for "weekly" — calendar week, sprint boundary, or rolling seven days? The answer likely differs by team type and should be configurable, but we need a sensible default.</li>
-      <li>How should teams initially configure the relevance layer — guided setup wizard, defaults with manual override, or inference from prior Jira activity patterns?</li>
+      <li>What is the right scope boundary for "weekly", calendar week, sprint boundary, or rolling seven days? The answer likely differs by team type and should be configurable, but we need a sensible default.</li>
+      <li>How should teams initially configure the relevance layer, guided setup wizard, defaults with manual override, or inference from prior Jira activity patterns?</li>
       <li>Should relevance weighting adapt over time based on which summaries users act on versus discard, and if so, how do we make that adaptation transparent rather than opaque?</li>
       <li>How do we handle multi-team programs where a TPM needs a consolidated summary across projects owned by different teams with different configurations?</li>
     </ul>
@@ -669,3 +669,5 @@
 
 </body>
 </html>
+
+

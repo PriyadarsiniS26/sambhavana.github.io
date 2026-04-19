@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VuGru — Photo Review and Approval Platform — Sambhavana Priyadarsini</title>
+  <title>VuGru, Photo Review and Approval Platform, Sambhavana Priyadarsini</title>
   <meta name="description" content="VuGru centralizes photo review, feedback, and approval into a single workflow. Led product definition and engineering team across two Darden courses." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -441,7 +441,7 @@
     <div class="article-meta">
       <span class="meta-type">Side Project</span>
       <div class="meta-dot"></div>
-      <span class="meta-date">UVA Darden — 2025</span>
+      <span class="meta-date">UVA Darden, 2025</span>
       <div class="meta-dot"></div>
       <span class="meta-tag">Deployed</span>
     </div>
@@ -452,14 +452,14 @@
 
   <div class="role-grid">
     <div class="role-card highlight">
-      <div class="role-label">Course 1 — Product Design</div>
+      <div class="role-label">Course 1, Product Design</div>
       <div class="role-title">Product Manager</div>
       <p>Defined design intent, conducted user research, developed personas and Jobs to be Done, and translated findings into a prioritized epic structure with outcome-anchored user stories.</p>
     </div>
     <div class="role-card highlight">
-      <div class="role-label">Course 2 — Coding with GPT</div>
+      <div class="role-label">Course 2, Coding with GPT</div>
       <div class="role-title">Engineering Team Lead</div>
-      <p>Led the team through full implementation — decomposing user stories into view, controller, and model logic, running two rounds of usability testing, and iterating based on observed behavior.</p>
+      <p>Led the team through full implementation, decomposing user stories into view, controller, and model logic, running two rounds of usability testing, and iterating based on observed behavior.</p>
     </div>
   </div>
 
@@ -469,7 +469,7 @@
 
     <h2>The Problem</h2>
 
-    <p>Photographers working with clients face a consistent breakdown: feedback arrives across three or four channels simultaneously, revisions get missed, and projects drag on because neither side has a clear view of what's been addressed and what hasn't. The root cause isn't communication volume — it's the absence of a shared source of truth that ties each piece of feedback to a specific photo and tracks its status through to resolution.</p>
+    <p>Photographers working with clients face a consistent breakdown: feedback arrives across three or four channels simultaneously, revisions get missed, and projects drag on because neither side has a clear view of what's been addressed and what hasn't. The root cause isn't communication volume, it's the absence of a shared source of truth that ties each piece of feedback to a specific photo and tracks its status through to resolution.</p>
 
     <div class="pull-quote">
       <p>The guiding design principle throughout both product and code: <b>clarity over complexity, intuition over instruction.</b></p>
@@ -554,16 +554,16 @@
 
     <div class="insight-box">
       <div class="insight-label">Build decision framework</div>
-      <p><b>If a component shaped user behavior, we built it from scratch.</b> If it supported the workflow without defining it, we considered external solutions. Authentication was the only third-party integration — a non-differentiating capability that didn't touch the core feedback workflow. Every view, controller, and model for photo display, commenting, and approval was written ourselves to maintain tight alignment between design intent and implementation behavior.</p>
+      <p><b>If a component shaped user behavior, we built it from scratch.</b> If it supported the workflow without defining it, we considered external solutions. Authentication was the only third-party integration, a non-differentiating capability that didn't touch the core feedback workflow. Every view, controller, and model for photo display, commenting, and approval was written ourselves to maintain tight alignment between design intent and implementation behavior.</p>
     </div>
 
     <h2>Testing and Iteration</h2>
 
-    <p>Two rounds of usability testing shaped the final implementation. The first round surfaced layout assumptions that didn't hold under real use — comments were relocated, button hierarchy was simplified, gallery behavior was adjusted. The second tested the end-to-end flow from upload through approval and validated the revised interactions.</p>
+    <p>Two rounds of usability testing shaped the final implementation. The first round surfaced layout assumptions that didn't hold under real use, comments were relocated, button hierarchy was simplified, gallery behavior was adjusted. The second tested the end-to-end flow from upload through approval and validated the revised interactions.</p>
 
-    <p>End-to-end tests were generated using Playwright via Cursor. Early test generation produced 66 tests, most of which lacked the contextual preconditions that real user flows require — tests tried to add comments when no albums existed, for example. Refining the scenarios to include proper "given/when/then" context produced a test suite that actually reflected user behavior and passed cleanly.</p>
+    <p>End-to-end tests were generated using Playwright via Cursor. Early test generation produced 66 tests, most of which lacked the contextual preconditions that real user flows require, tests tried to add comments when no albums existed, for example. Refining the scenarios to include proper "given/when/then" context produced a test suite that actually reflected user behavior and passed cleanly.</p>
 
-    <p>The debugging philosophy that emerged: treat confusion as a design bug, not just a code bug. When something wasn't working, the first question was whether the UI state matched the user's mental model — not just whether the code was syntactically correct.</p>
+    <p>The debugging philosophy that emerged: treat confusion as a design bug, not just a code bug. When something wasn't working, the first question was whether the UI state matched the user's mental model, not just whether the code was syntactically correct.</p>
 
     <h2>Stack and Deployment</h2>
 
@@ -576,7 +576,7 @@
       <span class="stack-tag">Authentication API</span>
     </div>
 
-    <p style="margin-top: 20px;">Deployed on Railway after evaluating AWS Amplify — Railway offered a more straightforward connection to the GitHub repo with no configuration overhead. The live product is available on request.</p>
+    <p style="margin-top: 20px;">Deployed on Railway after evaluating AWS Amplify, Railway offered a more straightforward connection to the GitHub repo with no configuration overhead. The live product is available on request.</p>
 
     <h2>What I Learned</h2>
 
@@ -587,7 +587,7 @@
       </div>
       <div class="learning-item">
         <div class="learning-dot"></div>
-        <p><b>Building the core workflow from scratch was the right call.</b> It kept iteration fast — small changes to layout or interaction could be implemented and tested without working around external frameworks.</p>
+        <p><b>Building the core workflow from scratch was the right call.</b> It kept iteration fast, small changes to layout or interaction could be implemented and tested without working around external frameworks.</p>
       </div>
       <div class="learning-item">
         <div class="learning-dot"></div>
@@ -617,3 +617,5 @@
 
 </body>
 </html>
+
+
